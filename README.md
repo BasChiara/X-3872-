@@ -2,5 +2,6 @@
 
 The repository contains:
 
-📌 Trigger Selection;
+📌 Trigger Selection; 
+
 📌 S/B variables display;
