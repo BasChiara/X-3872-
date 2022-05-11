@@ -1,4 +1,4 @@
-# B0 -> X(3872) rho (770) ANALYSIS
+# B0 -> X(3872) K0s ANALYSIS
 
 The repository contains:
 
