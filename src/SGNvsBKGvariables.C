@@ -39,56 +39,74 @@ void SGNvsBKGvariables::Loop() {
 //---- HISTOGRAMS ----//
 	int nbins = 50;
 	//... Mass
-	TH1F h_TOTfit_SGN_B0_M("TOTfit_SGN_B0_M", "", nbins,5., 5.5 );
-	TH1F h_TOTfit_BKG_B0_M("TOTfit_BKG_B0_M", "", nbins,5., 5.5 );
-	TH1F h_TOTfit_SGN_Rho_M("TOTfit_SGN_Rho_M", "", nbins,5., 5.5 );
-	TH1F h_TOTfit_BKG_Rho_M("TOTfit_BKG_Rho_M", "", nbins,5., 5.5 );
+	TH1F h_SGN_B0_M("SGN_B0_M", "", nbins,5., 5.5 );
+	TH1F h_BKG_B0_M("BKG_B0_M", "", nbins,5., 5.5 );
+	TH1F h_BKGr_B0_M("BKGr_B0_M", "", nbins,5., 5.5 );
+	TH1F h_BKGk_B0_M("BKGk_B0_M", "", nbins,5., 5.5 );
+	TH1F h_BKGrk_B0_M("BKGrk_B0_M", "", nbins,5., 5.5 );
+
+	TH1F h_SGN_Rho_M("SGN_Rho_M", "", nbins, .4, 1. );
+	TH1F h_BKG_Rho_M("BKG_Rho_M", "", nbins, .4, 1. );
+	TH1F h_BKGb_Rho_M("BKGb_Rho_M", "", nbins, .4, 1. );
+
 	//.... pT/M
-	TH1F h_TOTfit_SGN_B0_pT("TOTfit_SGN_B0_pT", "", nbins, 0, 20);
-	TH1F h_TOTfit_BKG_B0_pT("TOTfit_BKG_B0_pT", "", nbins, 0, 20);
-	TH1F h_TOTfit_SGN_JPsi_pT("TOTfit_SGN_JPsi_pT", "", nbins, 0, 1.);
-	TH1F h_TOTfit_BKG_JPsi_pT("TOTfit_BKG_JPsi_pT", "", nbins, 0, 1.);
-	TH1F h_TOTfit_SGN_Pi1_pT("TOTfit_SGN_Pi1_pT", "", nbins, 0, .3);
-	TH1F h_TOTfit_BKG_Pi1_pT("TOTfit_BKG_Pi1_pT", "", nbins, 0, .3);
-	TH1F h_TOTfit_SGN_Pi2_pT("TOTfit_SGN_Pi2_pT", "", nbins, 0, .2);
-	TH1F h_TOTfit_BKG_Pi2_pT("TOTfit_BKG_Pi2_pT", "", nbins, 0, .2);
-	TH1F h_TOTfit_SGN_Rho_pT("TOTfit_SGN_Rho_pT", "", nbins, 0, .5);
-	TH1F h_TOTfit_BKG_Rho_pT("TOTfit_BKG_Rho_pT", "", nbins, 0, .5);
-	TH1F h_TOTfit_SGN_X3872_pT("TOTfit_SGN_X3872_pT", "", nbins, 0, 1.);
-	TH1F h_TOTfit_BKG_X3872_pT("TOTfit_BKG_X3872_pT", "", nbins, 0, 1.);
-	TH1F h_TOTfit_SGN_K0s_pT("TOTfit_SGN_K0s_pT", "", nbins, 0, 0.6);
-	TH1F h_TOTfit_BKG_K0s_pT("TOTfit_BKG_K0s_pT", "", nbins, 0, 0.6);
+	TH1F h_SGN_B0_pT("SGN_B0_pT", "", nbins, 0, 20);
+	TH1F h_BKG_B0_pT("BKG_B0_pT", "", nbins, 0, 20);
+	TH1F h_SGN_JPsi_pT("SGN_JPsi_pT", "", nbins, 0, 1.);
+	TH1F h_BKG_JPsi_pT("BKG_JPsi_pT", "", nbins, 0, 1.);
+	TH1F h_SGN_Pi1_pT("SGN_Pi1_pT", "", nbins, 0, .3);
+	TH1F h_BKG_Pi1_pT("BKG_Pi1_pT", "", nbins, 0, .3);
+	TH1F h_BKGb_Pi1_pT("BKGb_Pi1_pT", "", nbins, 0, .3);
+	TH1F h_SGN_Pi2_pT("SGN_Pi2_pT", "", nbins, 0, .2);
+	TH1F h_BKG_Pi2_pT("BKG_Pi2_pT", "", nbins, 0, .2);
+	TH1F h_SGN_Rho_pT("SGN_Rho_pT", "", nbins, 0, .5);
+	TH1F h_BKG_Rho_pT("BKG_Rho_pT", "", nbins, 0, .5);
+	TH1F h_BKGb_Rho_pT("BKGb_Rho_pT", "", nbins, 0, .5);
+	TH1F h_SGN_X3872_pT("SGN_X3872_pT", "", nbins, 0.4, 1.);
+	TH1F h_BKG_X3872_pT("BKG_X3872_pT", "", nbins, 0.4, 1.);
+	TH1F h_SGN_K0s_pT("SGN_K0s_pT", "", nbins, 0, 0.6);
+	TH1F h_BKG_K0s_pT("BKG_K0s_pT", "", nbins, 0, 0.6);
+	TH1F h_BKGb_K0s_pT("BKGb_K0s_pT", "", nbins, 0, 0.6);
 
 	//.... Pi-B0 DeltaR
-	TH1F h_TOTfit_SGN_DR_Pi1B0_Rho("TOTfit_SGN_DR_Pi1B0_Rho", "", nbins,0, 1.);
-	TH1F h_TOTfit_BKG_DR_Pi1B0_Rho("TOTfit_BKG_DR_Pi1B0_Rho", "", nbins,0, 1.);
-	TH1F h_TOTfit_SGN_DR_Pi2B0_Rho("TOTfit_SGN_DR_Pi2B0_Rho", "", nbins,0, 1.);
-	TH1F h_TOTfit_BKG_DR_Pi2B0_Rho("TOTfit_BKG_DR_Pi2B0_Rho", "", nbins,0, 1.);
+	TH1F h_SGN_DR_Pi1B0_Rho("SGN_DR_Pi1B0_Rho", "", nbins,0, 1.);
+	TH1F h_BKG_DR_Pi1B0_Rho("BKG_DR_Pi1B0_Rho", "", nbins,0, 1.);
+	TH1F h_BKGb_DR_Pi1B0_Rho("BKGb_DR_Pi1B0_Rho", "", nbins,0, 1.);
+	TH1F h_SGN_DR_Pi2B0_Rho("SGN_DR_Pi2B0_Rho", "", nbins,0, 1.);
+	TH1F h_BKG_DR_Pi2B0_Rho("BKG_DR_Pi2B0_Rho", "", nbins,0, 1.);
 
-	TH1F h_TOTfit_SGN_DR_Pi1B0_K0s("TOTfit_SGN_DR_Pi1B0_K0s", "", nbins,0, 1.);
-	TH1F h_TOTfit_BKG_DR_Pi1B0_K0s("TOTfit_BKG_DR_Pi1B0_K0s", "", nbins,0, 1.);
-	TH1F h_TOTfit_SGN_DR_Pi2B0_K0s("TOTfit_SGN_DR_Pi2B0_K0s", "", nbins,0, 1.);
-	TH1F h_TOTfit_BKG_DR_Pi2B0_K0s("TOTfit_BKG_DR_Pi2B0_K0s", "", nbins,0, 1.);
+	TH1F h_SGN_DR_Pi1B0_K0s("SGN_DR_Pi1B0_K0s", "", nbins,0, 1.);
+	TH1F h_BKG_DR_Pi1B0_K0s("BKG_DR_Pi1B0_K0s", "", nbins,0, 1.);
+	TH1F h_SGN_DR_Pi2B0_K0s("SGN_DR_Pi2B0_K0s", "", nbins,0, 1.);
+	TH1F h_BKG_DR_Pi2B0_K0s("BKG_DR_Pi2B0_K0s", "", nbins,0, 1.);
+
+	//.... Rho vertex
+	TH1F h_SGN_Rho_D0("SGN_Rho_D0", "", nbins, 0., 8.);
+	TH1F h_BKG_Rho_D0("BKG_Rho_D0", "", nbins, 0., 8.);
+	TH1F h_BKGb_Rho_D0("BKGb_Rho_D0", "", nbins, 0., 8.);
 
 	//.... K0s vertex
-	TH1F h_TOTfit_SGN_K0s_SVp("TOTfit_SGN_K0s_SVp", "", nbins, 0., 1. );
-	TH1F h_TOTfit_BKG_K0s_SVp("TOTfit_BKG_K0s_SVp", "", nbins, 0., 1. );
+	TH1F h_SGN_K0s_SVp("SGN_K0s_SVp", "", nbins, 0., 1. );
+	TH1F h_BKG_K0s_SVp("BKG_K0s_SVp", "", nbins, 0., 1. );
+	TH1F h_SGN_K0s_D0("SGN_K0s_D0", "", nbins, 0., 8.);
+	TH1F h_BKG_K0s_D0("BKG_K0s_D0", "", nbins, 0., 8. );
+	TH1F h_BKGb_K0s_D0("BKGb_K0s_D0", "", nbins, 0., 8. );
 
 	//.... B0 vertex
-	TH1F h_TOTfit_SGN_B0_LxySign("TOTfit_SGN_B0_LxySign", "", nbins, 0, 100);
-	TH1F h_TOTfit_BKG_B0_LxySign("TOTfit_BKG_B0_LxySign", "", nbins, 0, 100);
-	TH1F h_TOTfit_SGN_B0_SVchi2("TOTfit_SGN_B0_SVchi2", "", nbins, 0, 20);
-	TH1F h_TOTfit_BKG_B0_SVchi2("TOTfit_BKG_B0_SVchi2", "", nbins, 0, 20);
-	TH1F h_TOTfit_SGN_B0_SVp("TOTfit_SGN_B0_SVp", "", nbins, 0, 1.);
-	TH1F h_TOTfit_BKG_B0_SVp("TOTfit_BKG_B0_SVp", "", nbins, 0, 1.);
-	TH1F h_TOTfit_SGN_B0_cosA("TOTfit_SGN_B0_cosA", "", nbins, 0.95, 1.);
-	TH1F h_TOTfit_BKG_B0_cosA("TOTfit_BKG_B0_cosA", "", nbins, 0.95, 1.);
+	TH1F h_SGN_B0_LxySign("SGN_B0_LxySign", "", nbins, 0, 100);
+	TH1F h_BKG_B0_LxySign("BKG_B0_LxySign", "", nbins, 0, 100);
+	TH1F h_SGN_B0_SVchi2("SGN_B0_SVchi2", "", nbins, 0, 20);
+	TH1F h_BKG_B0_SVchi2("BKG_B0_SVchi2", "", nbins, 0, 20);
+	TH1F h_SGN_B0_SVp("SGN_B0_SVp", "", nbins, 0, 1.);
+	TH1F h_BKG_B0_SVp("BKG_B0_SVp", "", nbins, 0, 1.);
+	TH1F h_SGN_B0_cosA("SGN_B0_cosA", "", nbins, 0.95, 1.);
+	TH1F h_BKG_B0_cosA("BKG_B0_cosA", "", nbins, 0.95, 1.);
 	float rVtx;
-	TH2F h_TOTfit_SGN_B0_rVSz_decayV("TOTfit_SGN_B0_rVSz_decayV", "", nbins, -10., 10., nbins, 0., 2.);
-	TH2F h_TOTfit_BKG_B0_rVSz_decayV("TOTfit_BKG_B0_rVSz_decayV", "", nbins, -10., 10., nbins, 0., 2.);
+	TH2F h_SGN_B0_rVSz_decayV("SGN_B0_rVSz_decayV", "", nbins, -10., 10., nbins, 0., 2.);
+	TH2F h_BKG_B0_rVSz_decayV("BKG_B0_rVSz_decayV", "", nbins, -10., 10., nbins, 0., 2.);
 	float Dphi;
-	TH1F h_TOTfit_SGN_Dphi_B0RF("TOTfit_SGN_Dphi_B0RF", "", nbins, 3., 3.16);
-	TH1F h_TOTfit_BKG_Dphi_B0RF("TOTfit_BKG_Dphi_B0RF", "", nbins, 3., 3.16);
+	TH1F h_SGN_Dphi_B0RF("SGN_Dphi_B0RF", "", nbins, 3., 3.16);
+	TH1F h_BKG_Dphi_B0RF("BKG_Dphi_B0RF", "", nbins, 3., 3.16);
 
 
 
@@ -109,135 +127,220 @@ void SGNvsBKGvariables::Loop() {
 		if (!(B0_SGN_idx < 0)){
 
 			RecoPartFillP4(B0_SGN_idx);
+
 			//... JPsi
-			h_TOTfit_SGN_JPsi_pT.Fill(B0_MuMu_fitted_pt[B0_SGN_idx]/B0_finalFit_pt[B0_SGN_idx]);
+			h_SGN_JPsi_pT.Fill(B0_MuMu_fitted_pt[B0_SGN_idx]/B0_finalFit_pt[B0_SGN_idx]);
 
 			//... Pions
-			h_TOTfit_SGN_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
-			h_TOTfit_SGN_Pi2_pT.Fill(P4_Reco_Pi2.Pt()/P4_Reco_B0.Pt());
+			h_SGN_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
+			h_SGN_Pi2_pT.Fill(P4_Reco_Pi2.Pt()/P4_Reco_B0.Pt());
 
 			//... Rho
-			h_TOTfit_SGN_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
-			h_TOTfit_SGN_DR_Pi2B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi2, P4_Reco_B0));
-			h_TOTfit_SGN_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[B0_SGN_idx]);
-			h_TOTfit_SGN_Rho_M.Fill(B0_finalFit_Rho_mass[B0_SGN_idx]);	
+			h_SGN_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
+			h_SGN_DR_Pi2B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi2, P4_Reco_B0));
+
+			h_SGN_Rho_D0.Fill(B0_PiPi_pi1_d0sig[B0_SGN_idx]);
+			h_SGN_Rho_D0.Fill(B0_PiPi_pi2_d0sig[B0_SGN_idx]);
+
+			h_SGN_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[B0_SGN_idx]);
+			h_SGN_Rho_M.Fill(B0_finalFit_Rho_mass[B0_SGN_idx]);	
+
 			//... X(3872)
-			h_TOTfit_SGN_X3872_pT.Fill(P4_Reco_X3872.Pt()/B0_finalFit_pt[B0_SGN_idx]);
+			h_SGN_X3872_pT.Fill(P4_Reco_X3872.Pt()/B0_finalFit_pt[B0_SGN_idx]);
 
 			//... K0s
-			h_TOTfit_SGN_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
-			h_TOTfit_SGN_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
-			h_TOTfit_SGN_K0s_pT.Fill(B0_K0s_mcFitted_pt[B0_SGN_idx]/B0_finalFit_pt[B0_SGN_idx]);
-			h_TOTfit_SGN_K0s_SVp.Fill(B0_K0s_mcFitted_svprob[B0_SGN_idx]);
+			h_SGN_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
+			h_SGN_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
+
+			h_SGN_K0s_pT.Fill(B0_K0s_mcFitted_pt[B0_SGN_idx]/B0_finalFit_pt[B0_SGN_idx]);
+
+			h_SGN_K0s_SVp.Fill(B0_K0s_mcFitted_svprob[B0_SGN_idx]);
+
+			h_SGN_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[B0_SGN_idx]);
+			h_SGN_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[B0_SGN_idx]);
 
 			//... B0
-			h_TOTfit_SGN_B0_M.Fill(B0_finalFit_mass[B0_SGN_idx]);
-			h_TOTfit_SGN_B0_pT.Fill(B0_finalFit_pt[B0_SGN_idx]/B0_finalFit_mass[B0_SGN_idx]);
+			h_SGN_B0_M.Fill(B0_finalFit_mass[B0_SGN_idx]);
+			h_SGN_B0_pT.Fill(B0_finalFit_pt[B0_SGN_idx]/B0_finalFit_mass[B0_SGN_idx]);
 
-			h_TOTfit_SGN_B0_LxySign.Fill(B0_lxySign_PV[B0_SGN_idx]);
-			h_TOTfit_SGN_B0_SVchi2.Fill(B0_svchi2[B0_SGN_idx]);
-			h_TOTfit_SGN_B0_SVp.Fill(B0_svprob[B0_SGN_idx]);
-			h_TOTfit_SGN_B0_cosA.Fill(B0_cosAlpha_PV[B0_SGN_idx]);
+			h_SGN_B0_LxySign.Fill(B0_lxySign_PV[B0_SGN_idx]);
+			h_SGN_B0_SVchi2.Fill(B0_svchi2[B0_SGN_idx]);
+			h_SGN_B0_SVp.Fill(B0_svprob[B0_SGN_idx]);
+			h_SGN_B0_cosA.Fill(B0_cosAlpha_PV[B0_SGN_idx]);
 
 			rVtx = sqrt(B0_decayVtxX[B0_SGN_idx]*B0_decayVtxX[B0_SGN_idx] + B0_decayVtxY[B0_SGN_idx]*B0_decayVtxY[B0_SGN_idx]);
-			h_TOTfit_SGN_B0_rVSz_decayV.Fill( B0_decayVtxZ[B0_SGN_idx], rVtx);
+			h_SGN_B0_rVSz_decayV.Fill( B0_decayVtxZ[B0_SGN_idx], rVtx);
 
 			Dphi = DeltaPhi_RestFrameB0(B0_SGN_idx); 
-			h_TOTfit_SGN_Dphi_B0RF.Fill(fabs(Dphi));
+			h_SGN_Dphi_B0RF.Fill(fabs(Dphi));
 		}
 
 		// ---> BACKGROUND B0
 		for (UInt_t bb = 0; bb < nBKG_B0; bb++){
 			Bidx = B0_BKG_idx[bb];
 			RecoPartFillP4(Bidx);
+
 			//... JPsi	
-			if (!B0_BKG_isTrueJPsi[bb]) h_TOTfit_BKG_JPsi_pT.Fill(B0_MuMu_fitted_pt[Bidx]/B0_finalFit_pt[Bidx]);
 
 			//... Rho
 			if (!B0_BKG_isTrueRho[bb]){ 
+
+				h_BKG_Rho_D0.Fill(B0_PiPi_pi1_d0sig[Bidx]);
+				h_BKG_Rho_D0.Fill(B0_PiPi_pi2_d0sig[Bidx]);
+				h_BKG_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx]);
+				h_BKG_Rho_M.Fill(B0_finalFit_Rho_mass[Bidx]);
+
 				if (!B0_BKG_isTruePi1[bb]){
-					h_TOTfit_BKG_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
-					h_TOTfit_BKG_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
+					h_BKG_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
+					h_BKG_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
 				}	
+
 				if (!B0_BKG_isTruePi2[bb]){
-					h_TOTfit_BKG_DR_Pi2B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi2, P4_Reco_B0));
-					h_TOTfit_BKG_Pi2_pT.Fill(P4_Reco_Pi2.Pt()/P4_Reco_B0.Pt());
+					h_BKG_DR_Pi2B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi2, P4_Reco_B0));
+					h_BKG_Pi2_pT.Fill(P4_Reco_Pi2.Pt()/P4_Reco_B0.Pt());
 				}
-				h_TOTfit_BKG_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx]);
-				h_TOTfit_BKG_Rho_M.Fill(B0_finalFit_Rho_mass[Bidx]);
+
+			}else{
+
+				h_SGN_Rho_D0.Fill(B0_PiPi_pi1_d0sig[Bidx]);
+				h_SGN_Rho_D0.Fill(B0_PiPi_pi2_d0sig[Bidx]);
+				h_SGN_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx]);
+				h_SGN_Rho_M.Fill(B0_finalFit_Rho_mass[Bidx]);
+
 			}	
 
 			//... X(3872)
-			if (!B0_BKG_isTrueJPsi[bb] || !B0_BKG_isTrueRho[bb]) h_TOTfit_BKG_X3872_pT.Fill(P4_Reco_X3872.Pt()/B0_finalFit_pt[Bidx]); 
+			if (!B0_BKG_isTrueJPsi[bb] || !B0_BKG_isTrueRho[bb]) h_BKG_X3872_pT.Fill(P4_Reco_X3872.Pt()/B0_finalFit_pt[Bidx]); 
 
 			//.... K0s
 			if (!B0_BKG_isTrueK0s[bb]){
-				h_TOTfit_BKG_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
-				h_TOTfit_BKG_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
-				h_TOTfit_BKG_K0s_pT.Fill(B0_K0s_mcFitted_pt[Bidx]/B0_finalFit_pt[Bidx]);
-				h_TOTfit_BKG_K0s_SVp.Fill(B0_K0s_mcFitted_svprob[Bidx]);
+
+				h_BKG_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
+				h_BKG_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
+				h_BKG_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[Bidx]);
+				h_BKG_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[Bidx]);
+				h_BKG_K0s_pT.Fill(B0_K0s_mcFitted_pt[Bidx]/B0_finalFit_pt[Bidx]);
+				h_BKG_K0s_SVp.Fill(B0_K0s_mcFitted_svprob[Bidx]);
+			}else{
+			
+				h_SGN_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
+				h_SGN_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
+				h_SGN_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[Bidx]);
+				h_SGN_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[Bidx]);
+				h_SGN_K0s_pT.Fill(B0_K0s_mcFitted_pt[Bidx]/B0_finalFit_pt[Bidx]);
+				h_SGN_K0s_SVp.Fill(B0_K0s_mcFitted_svprob[Bidx]);
 			}
 
 			//... B0
-			h_TOTfit_BKG_B0_M.Fill(B0_finalFit_mass[Bidx]);
-			h_TOTfit_BKG_B0_pT.Fill(B0_finalFit_pt[Bidx]/B0_finalFit_mass[Bidx]);
+			//mass
+			h_BKG_B0_M.Fill(B0_finalFit_mass[Bidx]);
+			if(!B0_BKG_isTrueRho[bb] &&  B0_BKG_isTrueK0s[bb]) h_BKGr_B0_M.Fill(B0_finalFit_mass[Bidx]);
+			if( B0_BKG_isTrueRho[bb] && !B0_BKG_isTrueK0s[bb]) h_BKGk_B0_M.Fill(B0_finalFit_mass[Bidx]);
+			if(!B0_BKG_isTrueRho[bb] && !B0_BKG_isTrueK0s[bb]) h_BKGrk_B0_M.Fill(B0_finalFit_mass[Bidx]);
 
-			h_TOTfit_BKG_B0_LxySign.Fill(B0_lxySign_PV[Bidx]);
-			h_TOTfit_BKG_B0_SVchi2.Fill(B0_svchi2[Bidx]);
-			h_TOTfit_BKG_B0_SVp.Fill(B0_svprob[Bidx]);
-			h_TOTfit_BKG_B0_cosA.Fill(B0_cosAlpha_PV[Bidx]);
+
+			h_BKG_B0_pT.Fill(B0_finalFit_pt[Bidx]/B0_finalFit_mass[Bidx]);
+
+			h_BKG_B0_LxySign.Fill(B0_lxySign_PV[Bidx]);
+			h_BKG_B0_SVchi2.Fill(B0_svchi2[Bidx]);
+			h_BKG_B0_SVp.Fill(B0_svprob[Bidx]);
+			h_BKG_B0_cosA.Fill(B0_cosAlpha_PV[Bidx]);
+
 			rVtx = sqrt(B0_decayVtxX[Bidx]*B0_decayVtxX[Bidx] + B0_decayVtxY[Bidx]*B0_decayVtxY[Bidx]);
-			h_TOTfit_BKG_B0_rVSz_decayV.Fill( B0_decayVtxZ[Bidx], rVtx);
+			h_BKG_B0_rVSz_decayV.Fill( B0_decayVtxZ[Bidx], rVtx);
+
 			Dphi = DeltaPhi_RestFrameB0(Bidx); 
-			h_TOTfit_BKG_Dphi_B0RF.Fill(fabs(Dphi));
+			h_BKG_Dphi_B0RF.Fill(fabs(Dphi));
+
+			// --> DISCRIMINANT
+
+			h_BKGb_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
+			h_BKGb_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
+
+			h_BKGb_Rho_D0.Fill(B0_PiPi_pi1_d0sig[Bidx]);
+			h_BKGb_Rho_D0.Fill(B0_PiPi_pi2_d0sig[Bidx]);
+			h_BKGb_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx]);
+			h_BKGb_Rho_M.Fill(B0_finalFit_Rho_mass[Bidx]);
+
+			h_BKGb_K0s_pT.Fill(B0_K0s_mcFitted_pt[Bidx]/B0_finalFit_pt[Bidx]);
+			h_BKGb_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[Bidx]);
+			h_BKGb_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[Bidx]);
+
+
+
 
 		}//on BKG B0
 	}//on B0 candidates
 
 	outFileHisto_ = new TFile("./plots/SB_variables.root", "RECREATE");
-	h_TOTfit_SGN_B0_M.Write();
-	h_TOTfit_BKG_B0_M.Write();
+	h_SGN_B0_M.Write();
+	h_BKG_B0_M.Write();
+	h_BKGr_B0_M.Write();
+	h_BKGk_B0_M.Write();
+	h_BKGrk_B0_M.Write();
 
-	h_TOTfit_SGN_JPsi_pT.Write();
-	h_TOTfit_BKG_JPsi_pT.Write();
-	h_TOTfit_SGN_Pi1_pT.Write();
-	h_TOTfit_BKG_Pi1_pT.Write();
-	h_TOTfit_SGN_Pi2_pT.Write();
-	h_TOTfit_BKG_Pi2_pT.Write();
-	h_TOTfit_SGN_Rho_pT.Write();
-	h_TOTfit_BKG_Rho_pT.Write();
-	h_TOTfit_SGN_X3872_pT.Write();
-	h_TOTfit_BKG_X3872_pT.Write();
-	h_TOTfit_SGN_K0s_pT.Write();
-	h_TOTfit_BKG_K0s_pT.Write();
-	h_TOTfit_SGN_B0_pT.Write();
-	h_TOTfit_BKG_B0_pT.Write();
+	h_SGN_Rho_M.Write();
+	h_BKG_Rho_M.Write();
 
-	h_TOTfit_SGN_DR_Pi1B0_Rho.Write();
-	h_TOTfit_SGN_DR_Pi2B0_Rho.Write();
-	h_TOTfit_BKG_DR_Pi1B0_Rho.Write();
-	h_TOTfit_BKG_DR_Pi2B0_Rho.Write();
-	h_TOTfit_SGN_DR_Pi1B0_K0s.Write();
-	h_TOTfit_BKG_DR_Pi1B0_K0s.Write();
-	h_TOTfit_SGN_DR_Pi2B0_K0s.Write();
-	h_TOTfit_BKG_DR_Pi2B0_K0s.Write();
+	h_SGN_JPsi_pT.Write();
+	h_BKG_JPsi_pT.Write();
+	h_SGN_Pi1_pT.Write();
+	h_BKG_Pi1_pT.Write();
+	h_SGN_Pi2_pT.Write();
+	h_BKG_Pi2_pT.Write();
+	h_SGN_Rho_pT.Write();
+	h_BKG_Rho_pT.Write();
+	h_SGN_X3872_pT.Write();
+	h_BKG_X3872_pT.Write();
+	h_SGN_K0s_pT.Write();
+	h_BKG_K0s_pT.Write();
+	h_SGN_B0_pT.Write();
+	h_BKG_B0_pT.Write();
 
-	h_TOTfit_SGN_K0s_SVp.Write();
-	h_TOTfit_BKG_K0s_SVp.Write();
+	h_SGN_DR_Pi1B0_Rho.Write();
+	h_SGN_DR_Pi2B0_Rho.Write();
+	h_BKG_DR_Pi1B0_Rho.Write();
+	h_BKG_DR_Pi2B0_Rho.Write();
+	h_SGN_DR_Pi1B0_K0s.Write();
+	h_BKG_DR_Pi1B0_K0s.Write();
+	h_SGN_DR_Pi2B0_K0s.Write();
+	h_BKG_DR_Pi2B0_K0s.Write();
+
+	h_SGN_Rho_D0.Write();
+	h_BKG_Rho_D0.Write();
+
+	h_SGN_K0s_SVp.Write();
+	h_BKG_K0s_SVp.Write();
+	h_SGN_K0s_D0.Write();
+	h_BKG_K0s_D0.Write();
 
 
-	h_TOTfit_SGN_B0_LxySign.Write();
-	h_TOTfit_BKG_B0_LxySign.Write();
-	h_TOTfit_SGN_B0_SVchi2.Write();
-	h_TOTfit_BKG_B0_SVchi2.Write();
-	h_TOTfit_SGN_B0_SVp.Write();
-	h_TOTfit_BKG_B0_SVp.Write();
-	h_TOTfit_SGN_B0_cosA.Write();
-	h_TOTfit_BKG_B0_cosA.Write();
-	h_TOTfit_SGN_B0_rVSz_decayV.Write();
-	h_TOTfit_BKG_B0_rVSz_decayV.Write();
-	h_TOTfit_SGN_Dphi_B0RF.Write();
-	h_TOTfit_BKG_Dphi_B0RF.Write();
+	h_SGN_B0_LxySign.Write();
+	h_BKG_B0_LxySign.Write();
+	h_SGN_B0_SVchi2.Write();
+	h_BKG_B0_SVchi2.Write();
+	h_SGN_B0_SVp.Write();
+	h_BKG_B0_SVp.Write();
+	h_SGN_B0_cosA.Write();
+	h_BKG_B0_cosA.Write();
+	h_SGN_B0_rVSz_decayV.Write();
+	h_BKG_B0_rVSz_decayV.Write();
+	h_SGN_Dphi_B0RF.Write();
+	h_BKG_Dphi_B0RF.Write();
+
+
+	h_BKGb_DR_Pi1B0_Rho.Write();
+	h_BKGb_Pi1_pT.Write();
+
+	h_BKGb_Rho_D0.Write();
+	h_BKGb_Rho_D0.Write();
+	h_BKGb_Rho_pT.Write();
+	h_BKGb_Rho_M.Write();
+
+	h_BKGb_K0s_pT.Write();
+	h_BKGb_K0s_D0.Write();
+	h_BKGb_K0s_D0.Write();
+
 
 }//Loop()
 
