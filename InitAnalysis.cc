@@ -13,8 +13,10 @@ using namespace std;
 TChain* LoadTree(){
 
 	//================ Loading files
-	const string dir_name = "/eos/cms/store/group/phys_egamma/crovelli/LowPtEle/B0ToXKs_2022Apr22/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220422_134814/0000/";
-	const char* directory = "/eos/cms/store/group/phys_egamma/crovelli/LowPtEle/B0ToXKs_2022Apr22/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220422_134814/0000";
+	const string dir_name = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/0000/";
+	const char* directory = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/0000";
+
+
 
 	if (directory == NULL) {
 		std::cout << "ERROR IN ACCESSING THE DIRECTORY" << std::endl;       
@@ -38,7 +40,8 @@ TChain* LoadTree(){
 			return NULL;
 		}
 
-		if (strcmp(file->d_name, "xNANO_mc_") < 0) continue; // skip "." and ".."
+		if (strcmp(file->d_name, "xNANO_mc_") < 0) continue; // skip "." and ".." and "log"
+		
 		Nfiles ++;
 		//	std::cout << file->d_name << std::endl;
 		tree_path = dir_name + file->d_name + tree_name; 
