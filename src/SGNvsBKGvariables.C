@@ -4,6 +4,7 @@
 SGNvsBKGvariables::SGNvsBKGvariables(TTree *tree) : B0toX3872K0s(tree){ 
 	
 	inFilePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/B0_SGNvsBKG_anlaysis.root";
+	outFilePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/TMVAinputs.root";
 
    P4_Reco_Mu1.SetM(mMuon); P4_Reco_Mu2.SetM(mMuon);
    P4_Reco_Pi1.SetM(mPion); P4_Reco_Pi2.SetM(mPion);
@@ -12,7 +13,6 @@ SGNvsBKGvariables::SGNvsBKGvariables(TTree *tree) : B0toX3872K0s(tree){
 
 SGNvsBKGvariables::~SGNvsBKGvariables(){
 	inFileTree_->Close();
-	outFileHisto_->Close();
 }
 
 
@@ -49,24 +49,41 @@ void SGNvsBKGvariables::Loop() {
 	TH1F h_BKG_Rho_M("BKG_Rho_M", "", nbins, .4, 1. );
 	TH1F h_BKGb_Rho_M("BKGb_Rho_M", "", nbins, .4, 1. );
 
+	TH2F h_SGN_RhovsK0s_M("SGN_RhovsK0s_M", "", nbins,  .45, .55, nbins, .4, 1.);
+	TH2F h_BKGk_RhovsK0s_M("BKGk_RhovsK0s_M", "", nbins,  .45, .55 ,nbins, .4, 1.);
+	TH2F h_BKGr_RhovsK0s_M("BKGr_RhovsK0s_M", "", nbins,  .45, .55 ,nbins, .4, 1.);
+	TH2F h_BKGrk_RhovsK0s_M("BKGrk_RhovsK0s_M", "", nbins,  .45, .55, nbins, .4, 1.);
+
+	TH2F h_SGN_B0vsX_M("SGN_B0vsX_M", "", nbins, 3.6, 4.1, nbins, 5., 5.5);
+	TH2F h_BKGk_B0vsX_M("BKGk_B0vsX_M", "", nbins, 3.6, 4.1, nbins, 5., 5.5);
+	TH2F h_BKG_B0vsX_M("BKG_B0vsX_M", "", nbins, 3.6, 4.1, nbins, 5., 5.5);
+
 	//.... pT/M
 	TH1F h_SGN_B0_pT("SGN_B0_pT", "", nbins, 0, 20);
 	TH1F h_BKG_B0_pT("BKG_B0_pT", "", nbins, 0, 20);
+
 	TH1F h_SGN_JPsi_pT("SGN_JPsi_pT", "", nbins, 0, 1.);
 	TH1F h_BKG_JPsi_pT("BKG_JPsi_pT", "", nbins, 0, 1.);
+
 	TH1F h_SGN_Pi1_pT("SGN_Pi1_pT", "", nbins, 0, .3);
 	TH1F h_BKG_Pi1_pT("BKG_Pi1_pT", "", nbins, 0, .3);
 	TH1F h_BKGb_Pi1_pT("BKGb_Pi1_pT", "", nbins, 0, .3);
 	TH1F h_SGN_Pi2_pT("SGN_Pi2_pT", "", nbins, 0, .2);
 	TH1F h_BKG_Pi2_pT("BKG_Pi2_pT", "", nbins, 0, .2);
+
 	TH1F h_SGN_Rho_pT("SGN_Rho_pT", "", nbins, 0, .5);
 	TH1F h_BKG_Rho_pT("BKG_Rho_pT", "", nbins, 0, .5);
 	TH1F h_BKGb_Rho_pT("BKGb_Rho_pT", "", nbins, 0, .5);
+
 	TH1F h_SGN_X3872_pT("SGN_X3872_pT", "", nbins, 0.4, 1.);
 	TH1F h_BKG_X3872_pT("BKG_X3872_pT", "", nbins, 0.4, 1.);
+
 	TH1F h_SGN_K0s_pT("SGN_K0s_pT", "", nbins, 0, 0.6);
 	TH1F h_BKG_K0s_pT("BKG_K0s_pT", "", nbins, 0, 0.6);
 	TH1F h_BKGb_K0s_pT("BKGb_K0s_pT", "", nbins, 0, 0.6);
+	
+	TH1F h_SGN_LeadTrk_pT("SGN_LeadTrk_pT", "", nbins, 0., .5);
+	TH1F h_BKG_LeadTrk_pT("BKG_LeadTrk_pT", "", nbins, 0., .5);
 
 	//.... Pi-B0 DeltaR
 	TH1F h_SGN_DR_Pi1B0_Rho("SGN_DR_Pi1B0_Rho", "", nbins,0, 1.);
@@ -84,6 +101,12 @@ void SGNvsBKGvariables::Loop() {
 	TH1F h_SGN_Rho_D0("SGN_Rho_D0", "", nbins, 0., 8.);
 	TH1F h_BKG_Rho_D0("BKG_Rho_D0", "", nbins, 0., 8.);
 	TH1F h_BKGb_Rho_D0("BKGb_Rho_D0", "", nbins, 0., 8.);
+	TH1F h_SGN_Rho_D0max("SGN_Rho_D0max", "", nbins, 0., .3);
+	TH1F h_BKG_Rho_D0max("BKG_Rho_D0max", "", nbins, 0., .3);
+	TH1F h_BKGb_Rho_D0max("BKGb_Rho_D0max", "", nbins, 0., .3);
+	TH1F h_SGN_Rho_D0min("SGN_Rho_D0min", "", nbins, 0., .01);
+	TH1F h_BKG_Rho_D0min("BKG_Rho_D0min", "", nbins, 0., 0.01);
+	TH1F h_BKGb_Rho_D0min("BKGb_Rho_D0min", "", nbins, 0., 0.01);
 
 	//.... K0s vertex
 	TH1F h_SGN_K0s_SVp("SGN_K0s_SVp", "", nbins, 0., 1. );
@@ -91,6 +114,8 @@ void SGNvsBKGvariables::Loop() {
 	TH1F h_SGN_K0s_D0("SGN_K0s_D0", "", nbins, 0., 8.);
 	TH1F h_BKG_K0s_D0("BKG_K0s_D0", "", nbins, 0., 8. );
 	TH1F h_BKGb_K0s_D0("BKGb_K0s_D0", "", nbins, 0., 8. );
+	TH2F h_SGN_K0s_D0vsPt("SGN_K0s_D0vsPt", "", nbins, 0, 0.6, nbins, 0., 8.);
+	TH2F h_BKG_K0s_D0vsPt("BKG_K0s_D0vsPt", "", nbins, 0, 0.6, nbins, 0., 8.);
 
 	//.... B0 vertex
 	TH1F h_SGN_B0_LxySign("SGN_B0_LxySign", "", nbins, 0, 100);
@@ -109,7 +134,8 @@ void SGNvsBKGvariables::Loop() {
 	TH1F h_BKG_Dphi_B0RF("BKG_Dphi_B0RF", "", nbins, 3., 3.16);
 
 
-
+	// out TTree setup
+	BookTreeTMVA();
 
 
    // Loop on B0 candidates 
@@ -135,12 +161,14 @@ void SGNvsBKGvariables::Loop() {
 			h_SGN_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
 			h_SGN_Pi2_pT.Fill(P4_Reco_Pi2.Pt()/P4_Reco_B0.Pt());
 
-			//... Rho
 			h_SGN_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
 			h_SGN_DR_Pi2B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi2, P4_Reco_B0));
 
+			//... Rho
 			h_SGN_Rho_D0.Fill(B0_PiPi_pi1_d0sig[B0_SGN_idx]);
 			h_SGN_Rho_D0.Fill(B0_PiPi_pi2_d0sig[B0_SGN_idx]);
+			h_SGN_Rho_D0max.Fill(B0_PiPi_pi1_maxd0PV[B0_SGN_idx]);
+			h_SGN_Rho_D0min.Fill(B0_PiPi_pi1_mind0PV[B0_SGN_idx]);
 
 			h_SGN_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[B0_SGN_idx]);
 			h_SGN_Rho_M.Fill(B0_finalFit_Rho_mass[B0_SGN_idx]);	
@@ -159,6 +187,11 @@ void SGNvsBKGvariables::Loop() {
 			h_SGN_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[B0_SGN_idx]);
 			h_SGN_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[B0_SGN_idx]);
 
+			h_SGN_K0s_D0vsPt.Fill(B0_finalFit_k0s_pt[B0_SGN_idx]/B0_finalFit_pt[B0_SGN_idx], B0_K0s_matchTrack1_D0sign[B0_SGN_idx]);
+			h_SGN_K0s_D0vsPt.Fill(B0_finalFit_k0s_pt[B0_SGN_idx]/B0_finalFit_pt[B0_SGN_idx], B0_K0s_matchTrack2_D0sign[B0_SGN_idx]);
+
+			h_SGN_LeadTrk_pT.Fill(max(P4_Reco_K0trk1.Pt(),P4_Reco_Pi1.Pt())/B0_finalFit_pt[B0_SGN_idx]);
+
 			//... B0
 			h_SGN_B0_M.Fill(B0_finalFit_mass[B0_SGN_idx]);
 			h_SGN_B0_pT.Fill(B0_finalFit_pt[B0_SGN_idx]/B0_finalFit_mass[B0_SGN_idx]);
@@ -173,6 +206,30 @@ void SGNvsBKGvariables::Loop() {
 
 			Dphi = DeltaPhi_RestFrameB0(B0_SGN_idx); 
 			h_SGN_Dphi_B0RF.Fill(fabs(Dphi));
+
+
+			//... 2D masses
+			h_SGN_B0vsX_M.Fill(B0_finalFit_X_mass[B0_SGN_idx] , B0_finalFit_mass[B0_SGN_idx]);
+			h_SGN_RhovsK0s_M.Fill(B0_K0s_nmcFitted_mass[B0_SGN_idx], B0_finalFit_Rho_mass[B0_SGN_idx]);
+
+
+
+		// ================== TMVA variables ================== //
+
+			pTM_B0_S = B0_finalFit_pt[B0_SGN_idx]/B0_finalFit_mass[B0_SGN_idx];
+			SVprob_S = B0_svprob[B0_SGN_idx]; 
+			SVchi2_S = B0_svchi2[B0_SGN_idx];
+			LxySign_B0_S = B0_lxySign_PV[B0_SGN_idx];
+			CosAlpha_B0_S = B0_cosAlpha_PV[B0_SGN_idx];
+
+			DR_Pi1B0_S = ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0);
+			pT_Pi1_S = P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt(); 
+			pT_Rho_S = P4_Reco_Rho.Pt()/B0_finalFit_pt[B0_SGN_idx];
+			D0_Rho_S = B0_PiPi_pi1_d0sig[B0_SGN_idx]; 
+			M_Rho_S = B0_finalFit_Rho_mass[B0_SGN_idx];
+
+			TMVAoutTreeSGN_->Fill();
+			
 		}
 
 		// ---> BACKGROUND B0
@@ -193,6 +250,8 @@ void SGNvsBKGvariables::Loop() {
 				if (!B0_BKG_isTruePi1[bb]){
 					h_BKG_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
 					h_BKG_Pi1_pT.Fill(P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt());
+					h_BKG_Rho_D0max.Fill(B0_PiPi_pi1_maxd0PV[Bidx]);
+					h_BKG_Rho_D0min.Fill(B0_PiPi_pi1_mind0PV[Bidx]);
 				}	
 
 				if (!B0_BKG_isTruePi2[bb]){
@@ -219,8 +278,11 @@ void SGNvsBKGvariables::Loop() {
 				h_BKG_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
 				h_BKG_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[Bidx]);
 				h_BKG_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[Bidx]);
-				h_BKG_K0s_pT.Fill(B0_K0s_mcFitted_pt[Bidx]/B0_finalFit_pt[Bidx]);
+				h_BKG_K0s_pT.Fill(B0_finalFit_k0s_pt[Bidx]/B0_finalFit_pt[Bidx]);
 				h_BKG_K0s_SVp.Fill(B0_K0s_mcFitted_svprob[Bidx]);
+
+				h_BKG_K0s_D0vsPt.Fill(B0_finalFit_k0s_pt[Bidx]/B0_finalFit_pt[Bidx], B0_K0s_matchTrack1_D0sign[Bidx]);
+				h_BKG_K0s_D0vsPt.Fill(B0_finalFit_k0s_pt[Bidx]/B0_finalFit_pt[Bidx], B0_K0s_matchTrack2_D0sign[Bidx]);
 			}else{
 			
 				h_SGN_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
@@ -252,6 +314,18 @@ void SGNvsBKGvariables::Loop() {
 			Dphi = DeltaPhi_RestFrameB0(Bidx); 
 			h_BKG_Dphi_B0RF.Fill(fabs(Dphi));
 
+			// ... 2D masses
+			if(!B0_BKG_isTrueRho[bb] &&  B0_BKG_isTrueK0s[bb]) h_BKGr_RhovsK0s_M.Fill(B0_K0s_nmcFitted_mass[Bidx], B0_finalFit_Rho_mass[Bidx]);		
+			if( B0_BKG_isTrueRho[bb] && !B0_BKG_isTrueK0s[bb]){
+				h_BKGk_B0vsX_M.Fill(B0_finalFit_X_mass[Bidx] , B0_finalFit_mass[Bidx]);
+				h_BKGk_RhovsK0s_M.Fill(B0_K0s_nmcFitted_mass[Bidx], B0_finalFit_Rho_mass[Bidx]);		
+				h_BKG_LeadTrk_pT.Fill(max(P4_Reco_K0trk1.Pt(),P4_Reco_Pi1.Pt())/B0_finalFit_pt[Bidx]);
+			}
+
+			if(!B0_BKG_isTrueRho[bb] && !B0_BKG_isTrueK0s[bb]){
+				h_BKGrk_RhovsK0s_M.Fill(B0_K0s_nmcFitted_mass[Bidx], B0_finalFit_Rho_mass[Bidx]);		
+				h_BKG_LeadTrk_pT.Fill(max(P4_Reco_K0trk1.Pt(),P4_Reco_Pi1.Pt())/B0_finalFit_pt[Bidx]);
+			}
 			// --> DISCRIMINANT
 
 			h_BKGb_DR_Pi1B0_Rho.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0));
@@ -259,6 +333,8 @@ void SGNvsBKGvariables::Loop() {
 
 			h_BKGb_Rho_D0.Fill(B0_PiPi_pi1_d0sig[Bidx]);
 			h_BKGb_Rho_D0.Fill(B0_PiPi_pi2_d0sig[Bidx]);
+			h_BKGb_Rho_D0max.Fill(B0_PiPi_pi1_maxd0PV[Bidx]);
+			h_BKGb_Rho_D0min.Fill(B0_PiPi_pi1_mind0PV[Bidx]);
 			h_BKGb_Rho_pT.Fill(P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx]);
 			h_BKGb_Rho_M.Fill(B0_finalFit_Rho_mass[Bidx]);
 
@@ -266,11 +342,35 @@ void SGNvsBKGvariables::Loop() {
 			h_BKGb_K0s_D0.Fill(B0_K0s_matchTrack1_D0sign[Bidx]);
 			h_BKGb_K0s_D0.Fill(B0_K0s_matchTrack2_D0sign[Bidx]);
 
+		// ================== TMVA variables ================== //
+			
+			pTM_B0_B = B0_finalFit_pt[Bidx]/B0_finalFit_mass[Bidx];
+			SVprob_B = B0_svprob[Bidx]; 
+			SVchi2_B = B0_svchi2[Bidx]; 
+			LxySign_B0_B = B0_lxySign_PV[Bidx];
+			CosAlpha_B0_B = B0_cosAlpha_PV[Bidx];
 
+			DR_Pi1B0_B = ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0);
+			pT_Pi1_B = P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt(); 
+			pT_Rho_B = P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx];
+			D0_Rho_B = B0_PiPi_pi1_d0sig[Bidx]; 
+			M_Rho_B = B0_finalFit_Rho_mass[Bidx];
 
+			TMVAoutTreeBKG_->Fill();
 
 		}//on BKG B0
-	}//on B0 candidates
+
+
+
+	}//on EVENTS 
+	
+
+	TMVAoutFile_->cd();
+
+	TMVAoutTreeSGN_->Write();
+	TMVAoutTreeBKG_->Write();
+
+	TMVAoutFile_->Close();
 
 	outFileHisto_ = new TFile("./plots/SB_variables.root", "RECREATE");
 	h_SGN_B0_M.Write();
@@ -281,6 +381,15 @@ void SGNvsBKGvariables::Loop() {
 
 	h_SGN_Rho_M.Write();
 	h_BKG_Rho_M.Write();
+
+	h_SGN_B0vsX_M.Write();
+	h_BKGk_B0vsX_M.Write();
+	h_BKG_B0vsX_M.Write();
+
+	h_SGN_RhovsK0s_M.Write();	
+	h_BKGr_RhovsK0s_M.Write();	
+	h_BKGk_RhovsK0s_M.Write();	
+	h_BKGrk_RhovsK0s_M.Write();	
 
 	h_SGN_JPsi_pT.Write();
 	h_BKG_JPsi_pT.Write();
@@ -294,6 +403,8 @@ void SGNvsBKGvariables::Loop() {
 	h_BKG_X3872_pT.Write();
 	h_SGN_K0s_pT.Write();
 	h_BKG_K0s_pT.Write();
+	h_SGN_LeadTrk_pT.Write();
+	h_BKG_LeadTrk_pT.Write();
 	h_SGN_B0_pT.Write();
 	h_BKG_B0_pT.Write();
 
@@ -308,11 +419,17 @@ void SGNvsBKGvariables::Loop() {
 
 	h_SGN_Rho_D0.Write();
 	h_BKG_Rho_D0.Write();
+	h_SGN_Rho_D0max.Write();
+	h_BKG_Rho_D0max.Write();
+	h_SGN_Rho_D0min.Write();
+	h_BKG_Rho_D0min.Write();
 
 	h_SGN_K0s_SVp.Write();
 	h_BKG_K0s_SVp.Write();
 	h_SGN_K0s_D0.Write();
 	h_BKG_K0s_D0.Write();
+	h_SGN_K0s_D0vsPt.Write();
+	h_BKG_K0s_D0vsPt.Write();
 
 
 	h_SGN_B0_LxySign.Write();
@@ -333,13 +450,15 @@ void SGNvsBKGvariables::Loop() {
 	h_BKGb_Pi1_pT.Write();
 
 	h_BKGb_Rho_D0.Write();
-	h_BKGb_Rho_D0.Write();
+	h_BKGb_Rho_D0max.Write();
+	h_BKGb_Rho_D0min.Write();
 	h_BKGb_Rho_pT.Write();
 	h_BKGb_Rho_M.Write();
 
 	h_BKGb_K0s_pT.Write();
 	h_BKGb_K0s_D0.Write();
-	h_BKGb_K0s_D0.Write();
+
+	outFileHisto_->Close();
 
 
 }//Loop()
@@ -377,6 +496,60 @@ int SGNvsBKGvariables::ReadTree(){
 }//ReadTree()
 
 
+void SGNvsBKGvariables::BookTreeTMVA(){
+
+	TMVAoutFile_ = new TFile(outFilePath_, "RECREATE");
+	if (!TMVAoutFile_->IsOpen() ){
+		std::cout << "ERROR : cannot open file "<< outFilePath_ << std::endl;
+		exit(-1);}
+	std::cout << "Writing output TTree in file "<< outFilePath_ << "\n" << std::endl;
+
+	TMVAoutTreeSGN_ = new TTree("inputSIGNAL", "inputSIGNAL");
+	TMVAoutTreeBKG_ = new TTree("inputBACKGROUND", "inputBACKGROUND");
+	std::cout << " .... TMVA input trees setting up .... " << std::endl;
+	
+	TMVAoutTreeSGN_->Branch("pTM_B0", &pTM_B0_S, "pTM_B0/F");
+	TMVAoutTreeSGN_->Branch("SVprob", &SVprob_S, "SVprob/F");
+	TMVAoutTreeSGN_->Branch("SVchi2", &SVchi2_S, "SVchi2/F");
+	TMVAoutTreeSGN_->Branch("LxySign_B0", &LxySign_B0_S, "LxySign_B0/F");
+	TMVAoutTreeSGN_->Branch("CosAlpha_B0", &CosAlpha_B0_S, "CosAlpha_B0/F");
+	TMVAoutTreeSGN_->Branch("DR_Pi1B0", &DR_Pi1B0_S, "DR_Pi1B0/F");
+	TMVAoutTreeSGN_->Branch("pT_Pi1", &pT_Pi1_S, "pT_Pi1/F");
+	TMVAoutTreeSGN_->Branch("pT_Rho", &pT_Rho_S, "pT_Rho/F");
+	TMVAoutTreeSGN_->Branch("D0_Rho", &D0_Rho_S, "D0_Rho/F");
+	TMVAoutTreeSGN_->Branch("M_Rho", &M_Rho_S, "M_Rho/F");
+
+	TMVAoutTreeBKG_->Branch("pTM_B0", &pTM_B0_B, "pTM_B0/F");
+	TMVAoutTreeBKG_->Branch("SVprob", &SVprob_B, "SVprob/F");
+	TMVAoutTreeBKG_->Branch("SVchi2", &SVchi2_B, "SVchi2/F");
+	TMVAoutTreeBKG_->Branch("LxySign_B0", &LxySign_B0_B, "LxySign_B0/F");
+	TMVAoutTreeBKG_->Branch("CosAlpha_B0", &CosAlpha_B0_B, "CosAlpha_B0/F");
+	TMVAoutTreeBKG_->Branch("DR_Pi1B0", &DR_Pi1B0_B, "DR_Pi1B0/F");
+	TMVAoutTreeBKG_->Branch("pT_Pi1", &pT_Pi1_B, "pT_Pi1/F");
+	TMVAoutTreeBKG_->Branch("pT_Rho", &pT_Rho_B, "pT_Rho/F");
+	TMVAoutTreeBKG_->Branch("D0_Rho", &D0_Rho_B, "D0_Rho/F");
+	TMVAoutTreeBKG_->Branch("M_Rho", &M_Rho_B, "M_Rho/F");
+
+
+}//BookTreeTMVA()
+
+void SGNvsBKGvariables::WriteSaveTrees(){
+
+
+	TMVAoutFile_ = new TFile(outFilePath_, "RECREATE");
+	if (!TMVAoutFile_->IsOpen() ){
+		std::cout << "ERROR : cannot open file "<< outFilePath_ << std::endl;
+		exit(-1);}
+	std::cout << "Writing output TTree in file "<< outFilePath_ << "\n" << std::endl;
+	TMVAoutFile_->cd();
+
+	TMVAoutTreeSGN_->Write();
+	TMVAoutTreeBKG_->Write();
+
+	TMVAoutFile_->Close();
+
+}//WriteSaveTrees()
+
 int SGNvsBKGvariables::RecoPartFillP4(const int Bidx){
 	int TrackQualityCheck = 1;
 
@@ -400,7 +573,8 @@ int SGNvsBKGvariables::RecoPartFillP4(const int Bidx){
 	P4_Reco_K0trk1.SetPt(B0_K0s_nmcFitted_pi1pt[Bidx]); P4_Reco_K0trk1.SetEta(B0_K0s_nmcFitted_pi1eta[Bidx]); P4_Reco_K0trk1.SetPhi(B0_K0s_nmcFitted_pi1phi[Bidx]);	
 	P4_Reco_K0trk2.SetPt(B0_K0s_nmcFitted_pi2pt[Bidx]); P4_Reco_K0trk2.SetEta(B0_K0s_nmcFitted_pi2eta[Bidx]); P4_Reco_K0trk2.SetPhi(B0_K0s_nmcFitted_pi2phi[Bidx]);	
 	//... K0s
-	P4_Reco_K0s.SetPt(B0_finalFit_k0s_pt[Bidx]); P4_Reco_K0s.SetEta(B0_finalFit_k0s_eta[Bidx]); P4_Reco_K0s.SetPhi(B0_finalFit_k0s_phi[Bidx]), P4_Reco_K0s.SetM(B0_K0s_mcFitted_mass[Bidx]);
+	P4_Reco_K0s.SetPt(B0_finalFit_k0s_pt[Bidx]); P4_Reco_K0s.SetEta(B0_finalFit_k0s_eta[Bidx]); P4_Reco_K0s.SetPhi(B0_finalFit_k0s_phi[Bidx]); 
+	P4_Reco_K0s.SetM(B0_K0s_mcFitted_mass[Bidx]);
 	//... B0
 	P4_Reco_B0.SetPt(B0_finalFit_pt[Bidx]); P4_Reco_B0.SetEta(B0_finalFit_eta[Bidx]); P4_Reco_B0.SetPhi(B0_finalFit_phi[Bidx]), P4_Reco_B0.SetM(B0_finalFit_mass[Bidx]);
 	 

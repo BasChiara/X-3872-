@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Fri Apr 29 09:41:03 2022 by ROOT version 6.24/06
+// Mon May 16 11:17:46 2022 by ROOT version 6.24/06
 // from TTree Events/Events
-// found on file: /eos/cms/store/group/phys_egamma/crovelli/LowPtEle/B0ToXKs_2022Apr22/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220422_134814/0000/xNANO_mc_2022Apr22_10.root
+// found on file: /eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/0000/xNANO_mc_2022Apr29_30.root
 //////////////////////////////////////////////////////////
 
 #ifndef B0toX3872K0s_h
@@ -180,17 +180,17 @@ public :
    UInt_t          nK0s;
    UInt_t          npipi;
    UInt_t          nGenPart;
-   Float_t         GenPart_eta[150];   //[nGenPart]
-   Float_t         GenPart_mass[150];   //[nGenPart]
-   Float_t         GenPart_phi[150];   //[nGenPart]
-   Float_t         GenPart_pt[150];   //[nGenPart]
-   Float_t         GenPart_vx[150];   //[nGenPart]
-   Float_t         GenPart_vy[150];   //[nGenPart]
-   Float_t         GenPart_vz[150];   //[nGenPart]
-   Int_t           GenPart_genPartIdxMother[150];   //[nGenPart]
-   Int_t           GenPart_pdgId[150];   //[nGenPart]
-   Int_t           GenPart_status[150];   //[nGenPart]
-   Int_t           GenPart_statusFlags[150];   //[nGenPart]
+   Float_t         GenPart_eta[100];   //[nGenPart]
+   Float_t         GenPart_mass[100];   //[nGenPart]
+   Float_t         GenPart_phi[100];   //[nGenPart]
+   Float_t         GenPart_pt[100];   //[nGenPart]
+   Float_t         GenPart_vx[100];   //[nGenPart]
+   Float_t         GenPart_vy[100];   //[nGenPart]
+   Float_t         GenPart_vz[100];   //[nGenPart]
+   Int_t           GenPart_genPartIdxMother[100];   //[nGenPart]
+   Int_t           GenPart_pdgId[100];   //[nGenPart]
+   Int_t           GenPart_status[100];   //[nGenPart]
+   Int_t           GenPart_statusFlags[100];   //[nGenPart]
    Float_t         Generator_binvar;
    Float_t         Generator_scalePDF;
    Float_t         Generator_weight;
@@ -219,20 +219,10 @@ public :
    Bool_t          ProbeTracks_isMatchedToMuon[1200];   //[nProbeTracks]
    Bool_t          ProbeTracks_isMatchedToSoftMuon[1200];   //[nProbeTracks]
    Int_t           HLT_Dimuon25_Jpsi;
-   Int_t           HLT_Dimuon20_Jpsi_Barrel_Seagulls;
    Int_t           HLT_DoubleMu4_JpsiTrk_Displaced;
    Int_t           HLT_DoubleMu4_JpsiTrkTrk_Displaced;
-   Int_t           HLT_DoubleMu4_3_Jpsi_Displaced;
-   Int_t           HLT_DoubleMu4_3_Jpsi;
-   Int_t           HLT_DoubleMu4_Jpsi_Displaced;
    Int_t           HLT_Dimuon18_PsiPrime;
-   Int_t           HLT_Dimuon10_PsiPrime_Barrel_Seagulls;
    Int_t           HLT_DoubleMu4_PsiPrimeTrk_Displaced;
-   Int_t           HLT_Dimuon0_Jpsi3p5_Muon2;
-   Int_t           HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi;
-   Int_t           HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi;
-   Int_t           HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05;
-   Int_t           HLT_DoubleMu4_3_Bs;
    UInt_t          nTrigObj;
    Float_t         TrigObj_pt[1];   //[nTrigObj]
    Float_t         TrigObj_eta[1];   //[nTrigObj]
@@ -249,20 +239,20 @@ public :
    Int_t           PV_npvs;
    Int_t           PV_npvsGood;
    UInt_t          nSV;
-   Float_t         SV_dlen[15];   //[nSV]
-   Float_t         SV_dlenSig[15];   //[nSV]
-   Float_t         SV_pAngle[15];   //[nSV]
+   Float_t         SV_dlen[3];   //[nSV]
+   Float_t         SV_dlenSig[3];   //[nSV]
+   Float_t         SV_pAngle[3];   //[nSV]
    Int_t           Muon_genPartIdx[20];   //[nMuon]
    Int_t           Muon_genPartFlav[20];   //[nMuon]
-   Float_t         SV_chi2[15];   //[nSV]
-   Float_t         SV_eta[15];   //[nSV]
-   Float_t         SV_mass[15];   //[nSV]
-   Float_t         SV_ndof[15];   //[nSV]
-   Float_t         SV_phi[15];   //[nSV]
-   Float_t         SV_pt[15];   //[nSV]
-   Float_t         SV_x[15];   //[nSV]
-   Float_t         SV_y[15];   //[nSV]
-   Float_t         SV_z[15];   //[nSV]
+   Float_t         SV_chi2[3];   //[nSV]
+   Float_t         SV_eta[3];   //[nSV]
+   Float_t         SV_mass[3];   //[nSV]
+   Float_t         SV_ndof[3];   //[nSV]
+   Float_t         SV_phi[3];   //[nSV]
+   Float_t         SV_pt[3];   //[nSV]
+   Float_t         SV_x[3];   //[nSV]
+   Float_t         SV_y[3];   //[nSV]
+   Float_t         SV_z[3];   //[nSV]
    Int_t           ProbeTracks_genPartIdx[1200];   //[nProbeTracks]
    Int_t           ProbeTracks_genPartFlav[1200];   //[nProbeTracks]
 
@@ -464,20 +454,10 @@ public :
    TBranch        *b_ProbeTracks_isMatchedToMuon;   //!
    TBranch        *b_ProbeTracks_isMatchedToSoftMuon;   //!
    TBranch        *b_HLT_Dimuon25_Jpsi;   //!
-   TBranch        *b_HLT_Dimuon20_Jpsi_Barrel_Seagulls;   //!
    TBranch        *b_HLT_DoubleMu4_JpsiTrk_Displaced;   //!
    TBranch        *b_HLT_DoubleMu4_JpsiTrkTrk_Displaced;   //!
-   TBranch        *b_HLT_DoubleMu4_3_Jpsi_Displaced;   //!
-   TBranch        *b_HLT_DoubleMu4_3_Jpsi;   //!
-   TBranch        *b_HLT_DoubleMu4_Jpsi_Displaced;   //!
    TBranch        *b_HLT_Dimuon18_PsiPrime;   //!
-   TBranch        *b_HLT_Dimuon10_PsiPrime_Barrel_Seagulls;   //!
    TBranch        *b_HLT_DoubleMu4_PsiPrimeTrk_Displaced;   //!
-   TBranch        *b_HLT_Dimuon0_Jpsi3p5_Muon2;   //!
-   TBranch        *b_HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi;   //!
-   TBranch        *b_HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi;   //!
-   TBranch        *b_HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05;   //!
-   TBranch        *b_HLT_DoubleMu4_3_Bs;   //!
    TBranch        *b_nTrigObj;   //!
    TBranch        *b_TrigObj_pt;   //!
    TBranch        *b_TrigObj_eta;   //!
@@ -530,9 +510,9 @@ B0toX3872K0s::B0toX3872K0s(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/group/phys_egamma/crovelli/LowPtEle/B0ToXKs_2022Apr22/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220422_134814/0000/xNANO_mc_2022Apr22_10.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/0000/xNANO_mc_2022Apr29_30.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/eos/cms/store/group/phys_egamma/crovelli/LowPtEle/B0ToXKs_2022Apr22/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220422_134814/0000/xNANO_mc_2022Apr22_10.root");
+         f = new TFile("/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/0000/xNANO_mc_2022Apr29_30.root");
       }
       f->GetObject("Events",tree);
 
@@ -778,20 +758,10 @@ void B0toX3872K0s::Init(TTree *tree)
    fChain->SetBranchAddress("ProbeTracks_isMatchedToMuon", ProbeTracks_isMatchedToMuon, &b_ProbeTracks_isMatchedToMuon);
    fChain->SetBranchAddress("ProbeTracks_isMatchedToSoftMuon", ProbeTracks_isMatchedToSoftMuon, &b_ProbeTracks_isMatchedToSoftMuon);
    fChain->SetBranchAddress("HLT_Dimuon25_Jpsi", &HLT_Dimuon25_Jpsi, &b_HLT_Dimuon25_Jpsi);
-   fChain->SetBranchAddress("HLT_Dimuon20_Jpsi_Barrel_Seagulls", &HLT_Dimuon20_Jpsi_Barrel_Seagulls, &b_HLT_Dimuon20_Jpsi_Barrel_Seagulls);
    fChain->SetBranchAddress("HLT_DoubleMu4_JpsiTrk_Displaced", &HLT_DoubleMu4_JpsiTrk_Displaced, &b_HLT_DoubleMu4_JpsiTrk_Displaced);
    fChain->SetBranchAddress("HLT_DoubleMu4_JpsiTrkTrk_Displaced", &HLT_DoubleMu4_JpsiTrkTrk_Displaced, &b_HLT_DoubleMu4_JpsiTrkTrk_Displaced);
-   fChain->SetBranchAddress("HLT_DoubleMu4_3_Jpsi_Displaced", &HLT_DoubleMu4_3_Jpsi_Displaced, &b_HLT_DoubleMu4_3_Jpsi_Displaced);
-   fChain->SetBranchAddress("HLT_DoubleMu4_3_Jpsi", &HLT_DoubleMu4_3_Jpsi, &b_HLT_DoubleMu4_3_Jpsi);
-   fChain->SetBranchAddress("HLT_DoubleMu4_Jpsi_Displaced", &HLT_DoubleMu4_Jpsi_Displaced, &b_HLT_DoubleMu4_Jpsi_Displaced);
    fChain->SetBranchAddress("HLT_Dimuon18_PsiPrime", &HLT_Dimuon18_PsiPrime, &b_HLT_Dimuon18_PsiPrime);
-   fChain->SetBranchAddress("HLT_Dimuon10_PsiPrime_Barrel_Seagulls", &HLT_Dimuon10_PsiPrime_Barrel_Seagulls, &b_HLT_Dimuon10_PsiPrime_Barrel_Seagulls);
    fChain->SetBranchAddress("HLT_DoubleMu4_PsiPrimeTrk_Displaced", &HLT_DoubleMu4_PsiPrimeTrk_Displaced, &b_HLT_DoubleMu4_PsiPrimeTrk_Displaced);
-   fChain->SetBranchAddress("HLT_Dimuon0_Jpsi3p5_Muon2", &HLT_Dimuon0_Jpsi3p5_Muon2, &b_HLT_Dimuon0_Jpsi3p5_Muon2);
-   fChain->SetBranchAddress("HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi", &HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi, &b_HLT_DoubleMu2_Jpsi_DoubleTkMu0_Phi);
-   fChain->SetBranchAddress("HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi", &HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi, &b_HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi);
-   fChain->SetBranchAddress("HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05", &HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05, &b_HLT_DoubleMu2_Jpsi_DoubleTrk1_Phi1p05);
-   fChain->SetBranchAddress("HLT_DoubleMu4_3_Bs", &HLT_DoubleMu4_3_Bs, &b_HLT_DoubleMu4_3_Bs);
    fChain->SetBranchAddress("nTrigObj", &nTrigObj, &b_nTrigObj);
    fChain->SetBranchAddress("TrigObj_pt", &TrigObj_pt, &b_TrigObj_pt);
    fChain->SetBranchAddress("TrigObj_eta", &TrigObj_eta, &b_TrigObj_eta);
