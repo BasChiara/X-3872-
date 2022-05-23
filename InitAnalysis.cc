@@ -1,4 +1,5 @@
 #include "./src/B0toX3872K0s.C"
+#include "./src/PrePostFit.C"
 #include "./src/TriggerSelection.C"
 #include "./src/SGNvsBKGvariables.C"
 #include <iostream>
@@ -55,6 +56,19 @@ TChain* LoadTree(){
 
 }//LoadTree()
 
+
+
+int RunPrePostFitAnalysis() {
+
+	TChain* chain = LoadTree();
+
+	//================ Run analysis                                                                                                                         
+	PrePostFit tree( chain );
+
+	tree.Loop();
+
+	return 0;
+}// RunPrePostFitAnalysis()
 
 
 int RunTriggerSel() {
