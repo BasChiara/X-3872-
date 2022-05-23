@@ -282,7 +282,7 @@ int TMVAClassification( TString myMethodList = "" )
 	//
 	//    dataloader->PrepareTrainingAndTestTree( mycut,
 	//         "NSigTrain=3000:NBkgTrain=3000:NSigTest=3000:NBkgTest=3000:SplitMode=Random:!V" );
-	dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, "nTrain_Signal=574:nTrain_Background=403:SplitMode=Random:NormMode=None:!V");
+	dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, "nTrain_Signal=574:nTrain_Background=402:SplitMode=Random:NormMode=None:!V");
 			//"nTrain_Signal=1000:nTrain_Background=1000:SplitMode=Random:NormMode=NumEvents:!V" );
 
 	// ### Book MVA methods
@@ -477,8 +477,8 @@ int TMVAClassification( TString myMethodList = "" )
 				"!H:!V:NTrees=1000:MinNodeSize=2.5%:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2" );
 
 	if (Use["BDT"])  // Adaptive Boost
-		factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",
-				"!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
+		factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT_nT100_b08_nC30",
+		 "!H:!V:NTrees=100:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.8:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=30");	
 
 	if (Use["BDTB"]) // Bagging
 		factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDTB",

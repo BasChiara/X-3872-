@@ -43,7 +43,7 @@ void PrePostFit::Loop() {
    //    trigger
    TH1F h_FiredMCmatch_Mu_pT("FiredMCmatch_Mu_pT", "", nbins/2., 2,12);
    TH1F h_FiredMCmatch_Mu_eta("FiredMCmatch_Mu_eta", "", nbins/2, -3.5 , 3.5);
-   TH1F h_FiredMCmatch_Mu_dr("FiredMCmatch_Mu_dr", "", nbins, 0, 2.);
+   TH1F h_FiredMCmatch_Mu_dr("FiredMCmatch_Mu_dr", "", nbins, 0, 0.2);
    // --> MUON PAIR (JPsi)
    Mlow = 2.9, Mhigh = 3.3;
    TH1F h_MCmatch_prefit_JPsi_M("MCmatch_prefit_JPsi_M", "", nbins, Mlow, Mhigh);
@@ -54,16 +54,16 @@ void PrePostFit::Loop() {
    	//KINEMATICS
    TH1F h_FiredMCmatch_MuMu_M("FiredMCmatch_MuMu_M", "", nbins, 2.8, 3.4);
    TH1F h_FiredMCmatch_MuMu_pT("FiredMCmatch_MuMu_pT", "", 20, 6, 24);
-   TH1F h_FiredMCmatch_MuMu_DCA("FiredMCmatch_MuMu_DCA", "", nbins/2, 0., 0.5);
+   TH1F h_FiredMCmatch_MuMu_DCA("FiredMCmatch_MuMu_DCA", "", nbins/2, 0., 0.1);
    	//VTX
-   TH1F h_FiredMCmatch_MuMu_LxySign("FiredMCmatch_MuMu_LxySign", "" , 10, 0, 10);
-   TH1F h_FiredMCmatch_MuMu_cosAlpha("FiredMCmatch_MuMu_cosAlpha", "", nbins/2, 0.5,1.);
+   TH1F h_FiredMCmatch_MuMu_LxySign("FiredMCmatch_MuMu_LxySign", "" , 20, 0, 10);
+   TH1F h_FiredMCmatch_MuMu_cosAlpha("FiredMCmatch_MuMu_cosAlpha", "", nbins/2, 0.98,1.);
    TH1F h_FiredMCmatch_MuMu_SVp("FiredMCmatch_MuMu_SVp", "", nbins/2, 0., 1.);
    // --> TRACKS
    // tracks passing the trigger
-   TH1F h_FiredMCmatch_Trk_pT("FiredMCmatch_Trk_pT", "", 25, 0,5);
+   TH1F h_FiredMCmatch_Trk_pT("FiredMCmatch_Trk_pT", "", nbins/2, 0,5);
    TH1F h_FiredMCmatch_Trk_eta("FiredMCmatch_Trk_eta", "", nbins/2. , -3.5 , 3.5);
-   TH1F h_FiredMCmatch_Trk_d0Sign("FiredMCmatch_Trk_d0Sign", "", 16, 0, 8.);
+   TH1F h_FiredMCmatch_Trk_d0Sign("FiredMCmatch_Trk_d0Sign", "", nbins/2., 0, 8.);
    TH1F h_FiredMCmatch_K0s_vs_RhoTrk_N("FiredMCmatch_K0s_vs_RhoTrk_N", "", 2, 0,2);
    // --> RHO
    Mlow = 0.4, Mhigh = 1.;

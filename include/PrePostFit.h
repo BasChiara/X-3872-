@@ -1,7 +1,7 @@
 #ifndef PrePostFit_h
 #define PrePostFit_h
 
-#include "../src/B0toX3872K0s.C"
+//#include "../src/B0toX3872K0s.C"
 
 #include <TROOT.h>
 #include <TChain.h>
