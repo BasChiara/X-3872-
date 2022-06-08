@@ -39,41 +39,53 @@ void SGNvsBKGvariables::Loop() {
 //---- HISTOGRAMS ----//
 	int nbins = 50;
 	//... Mass
-	TH1F h_SGN_B0_M("SGN_B0_M", "", nbins,5., 5.5 );
-	TH1F h_BKG_B0_M("BKG_B0_M", "", nbins,5., 5.5 );
-	TH1F h_BKGr_B0_M("BKGr_B0_M", "", nbins,5., 5.5 );
-	TH1F h_BKGk_B0_M("BKGk_B0_M", "", nbins,5., 5.5 );
-	TH1F h_BKGrk_B0_M("BKGrk_B0_M", "", nbins,5., 5.5 );
+	nbins = 100;
+	float Mlow = 5., Mhigh = 5.6;
+	TH1F h_SGN_B0_M("SGN_B0_M", "", nbins+20, Mlow, Mhigh );
+	TH1F h_BKG_B0_M("BKG_B0_M", "", nbins,Mlow, Mhigh );
+	TH1F h_BKGr_B0_M("BKGr_B0_M", "", nbins,Mlow, Mhigh );
+	TH1F h_BKGk_B0_M("BKGk_B0_M", "", nbins,Mlow, Mhigh );
+	TH1F h_BKGrk_B0_M("BKGrk_B0_M", "", nbins,Mlow, Mhigh );
+	
+	Mlow = .4, Mhigh = 1.;
+	TH1F h_SGN_Rho_M("SGN_Rho_M", "", nbins, Mlow, Mhigh );
+	TH1F h_BKG_Rho_M("BKG_Rho_M", "", nbins, Mlow, Mhigh );
+	TH1F h_BKGb_Rho_M("BKGb_Rho_M", "", nbins,Mlow, Mhigh );
 
-	TH1F h_SGN_Rho_M("SGN_Rho_M", "", nbins, .4, 1. );
-	TH1F h_BKG_Rho_M("BKG_Rho_M", "", nbins, .4, 1. );
-	TH1F h_BKGb_Rho_M("BKGb_Rho_M", "", nbins, .4, 1. );
+	Mlow = 3.7, Mhigh = 4.05;	
+	TH1F h_SGN_X3872_M("SGN_X3872_M", "", nbins, Mlow, Mhigh );
+	Mlow = 0.38, Mhigh = 0.62;	
+	TH1F h_SGN_K0s_M("SGN_K0s_M", "", nbins + 20, Mlow, Mhigh );
 
 	TH2F h_SGN_RhovsK0s_M("SGN_RhovsK0s_M", "", nbins,  .45, .55, nbins, .4, 1.);
 	TH2F h_BKGk_RhovsK0s_M("BKGk_RhovsK0s_M", "", nbins,  .45, .55 ,nbins, .4, 1.);
 	TH2F h_BKGr_RhovsK0s_M("BKGr_RhovsK0s_M", "", nbins,  .45, .55 ,nbins, .4, 1.);
 	TH2F h_BKGrk_RhovsK0s_M("BKGrk_RhovsK0s_M", "", nbins,  .45, .55, nbins, .4, 1.);
+	
 
 	TH2F h_SGN_B0vsX_M("SGN_B0vsX_M", "", nbins, 3.6, 4.1, nbins, 5., 5.5);
 	TH2F h_BKGk_B0vsX_M("BKGk_B0vsX_M", "", nbins, 3.6, 4.1, nbins, 5., 5.5);
 	TH2F h_BKG_B0vsX_M("BKG_B0vsX_M", "", nbins, 3.6, 4.1, nbins, 5., 5.5);
-
+	
+	nbins = 50;
 	//.... pT/M
+
 	TH1F h_SGN_B0_pT("SGN_B0_pT", "", nbins, 0, 20);
-	TH1F h_BKG_B0_pT("BKG_B0_pT", "", nbins, 0, 20);
+	TH1F h_BKG_B0_pT("BKG_B0_pT", "", 40, 2.0439124, 23.200866);
+	//TH1F h_BKG_B0_pT("BKG_B0_pT", "", nbins, 0, 20);
 
 	TH1F h_SGN_JPsi_pT("SGN_JPsi_pT", "", nbins, 0, 1.);
 	TH1F h_BKG_JPsi_pT("BKG_JPsi_pT", "", nbins, 0, 1.);
 
 	TH1F h_SGN_Pi1_pT("SGN_Pi1_pT", "", nbins, 0, .3);
 	TH1F h_BKG_Pi1_pT("BKG_Pi1_pT", "", nbins, 0, .3);
-	TH1F h_BKGb_Pi1_pT("BKGb_Pi1_pT", "", nbins, 0, .3);
+	TH1F h_BKGb_Pi1_pT("BKGb_Pi1_pT", "",40, 0.016485984, 0.28147935);
 	TH1F h_SGN_Pi2_pT("SGN_Pi2_pT", "", nbins, 0, .2);
 	TH1F h_BKG_Pi2_pT("BKG_Pi2_pT", "", nbins, 0, .2);
 
 	TH1F h_SGN_Rho_pT("SGN_Rho_pT", "", nbins, 0, .5);
 	TH1F h_BKG_Rho_pT("BKG_Rho_pT", "", nbins, 0, .5);
-	TH1F h_BKGb_Rho_pT("BKGb_Rho_pT", "", nbins, 0, .5);
+	TH1F h_BKGb_Rho_pT("BKGb_Rho_pT", "", 40, 0.028098026, 0.38227733);
 
 	TH1F h_SGN_X3872_pT("SGN_X3872_pT", "", nbins, 0.4, 1.);
 	TH1F h_BKG_X3872_pT("BKG_X3872_pT", "", nbins, 0.4, 1.);
@@ -88,7 +100,7 @@ void SGNvsBKGvariables::Loop() {
 	//.... Pi-B0 DeltaR
 	TH1F h_SGN_DR_Pi1B0_Rho("SGN_DR_Pi1B0_Rho", "", nbins,0, 1.);
 	TH1F h_BKG_DR_Pi1B0_Rho("BKG_DR_Pi1B0_Rho", "", nbins,0, 1.);
-	TH1F h_BKGb_DR_Pi1B0_Rho("BKGb_DR_Pi1B0_Rho", "", nbins,0, 1.);
+	TH1F h_BKGb_DR_Pi1B0_Rho("BKGb_DR_Pi1B0_Rho", "", 40 ,0.0033471850, 0.74371076);
 	TH1F h_SGN_DR_Pi2B0_Rho("SGN_DR_Pi2B0_Rho", "", nbins,0, 1.);
 	TH1F h_BKG_DR_Pi2B0_Rho("BKG_DR_Pi2B0_Rho", "", nbins,0, 1.);
 
@@ -100,7 +112,7 @@ void SGNvsBKGvariables::Loop() {
 	//.... Rho vertex
 	TH1F h_SGN_Rho_D0("SGN_Rho_D0", "", nbins, 0., 8.);
 	TH1F h_BKG_Rho_D0("BKG_Rho_D0", "", nbins, 0., 8.);
-	TH1F h_BKGb_Rho_D0("BKGb_Rho_D0", "", nbins, 0., 8.);
+	TH1F h_BKGb_Rho_D0("BKGb_Rho_D0", "", 40, 0.00046771113, 57.158501);
 	TH1F h_SGN_Rho_D0max("SGN_Rho_D0max", "", nbins, 0., .3);
 	TH1F h_BKG_Rho_D0max("BKG_Rho_D0max", "", nbins, 0., .3);
 	TH1F h_BKGb_Rho_D0max("BKGb_Rho_D0max", "", nbins, 0., .3);
@@ -118,14 +130,16 @@ void SGNvsBKGvariables::Loop() {
 	TH2F h_BKG_K0s_D0vsPt("BKG_K0s_D0vsPt", "", nbins, 0, 0.6, nbins, 0., 8.);
 
 	//.... B0 vertex
-	TH1F h_SGN_B0_LxySign("SGN_B0_LxySign", "", nbins, 0, 100);
-	TH1F h_BKG_B0_LxySign("BKG_B0_LxySign", "", nbins, 0, 100);
+	nbins = 40;
+	TH1F h_SGN_B0_LxySign("SGN_B0_LxySign", "", nbins,0, 100); 
+	TH1F h_BKG_B0_LxySign("BKG_B0_LxySign", "", nbins, 3.1187811, 464.68721);
 	TH1F h_SGN_B0_SVchi2("SGN_B0_SVchi2", "", nbins, 0, 20);
 	TH1F h_BKG_B0_SVchi2("BKG_B0_SVchi2", "", nbins, 0, 20);
 	TH1F h_SGN_B0_SVp("SGN_B0_SVp", "", nbins, 0, 1.);
-	TH1F h_BKG_B0_SVp("BKG_B0_SVp", "", nbins, 0, 1.);
+	TH1F h_BKG_B0_SVp("BKG_B0_SVp", "", nbins, 0.010026554, 1.0245656);
 	TH1F h_SGN_B0_cosA("SGN_B0_cosA", "", nbins, 0.95, 1.);
-	TH1F h_BKG_B0_cosA("BKG_B0_cosA", "", nbins, 0.95, 1.);
+	TH1F h_BKG_B0_cosA("BKG_B0_cosA", "", nbins, 0.96574142, 1.0008565);
+	nbins = 50;
 	float rVtx;
 	TH2F h_SGN_B0_rVSz_decayV("SGN_B0_rVSz_decayV", "", nbins, -10., 10., nbins, 0., 2.);
 	TH2F h_BKG_B0_rVSz_decayV("BKG_B0_rVSz_decayV", "", nbins, -10., 10., nbins, 0., 2.);
@@ -149,7 +163,7 @@ void SGNvsBKGvariables::Loop() {
       if (jcand + 1  == Nbreak) break;    
       if ((jcand + 1) % NPrint==0) cout << "--> " << (float)(jcand + 1)/NB0cand * 100. << " \%"<< endl;
 
-		// ---> SIGNAL B0
+	// ==================== SIGNAL B0 ====================//
 		if (!(B0_SGN_idx < 0)){
 
 			RecoPartFillP4(B0_SGN_idx);
@@ -174,9 +188,11 @@ void SGNvsBKGvariables::Loop() {
 			h_SGN_Rho_M.Fill(B0_finalFit_Rho_mass[B0_SGN_idx]);	
 
 			//... X(3872)
+			h_SGN_X3872_M.Fill(P4_Reco_X3872.M());
 			h_SGN_X3872_pT.Fill(P4_Reco_X3872.Pt()/B0_finalFit_pt[B0_SGN_idx]);
 
 			//... K0s
+			h_SGN_K0s_M.Fill(B0_K0s_nmcFitted_mass[B0_SGN_idx]);
 			h_SGN_DR_Pi1B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0));
 			h_SGN_DR_Pi2B0_K0s.Fill(ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk2, P4_Reco_B0));
 
@@ -222,7 +238,7 @@ void SGNvsBKGvariables::Loop() {
 			LxySign_B0_S = B0_lxySign_PV[B0_SGN_idx];
 			CosAlpha_B0_S = B0_cosAlpha_PV[B0_SGN_idx];
 
-			DR_Pi1B0_S = ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0);
+			DR_Pi1B0_S = ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0);
 			pT_Pi1_S = P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt(); 
 			pT_Rho_S = P4_Reco_Rho.Pt()/B0_finalFit_pt[B0_SGN_idx];
 			D0_Rho_S = B0_PiPi_pi1_d0sig[B0_SGN_idx]; 
@@ -232,7 +248,8 @@ void SGNvsBKGvariables::Loop() {
 			
 		}
 
-		// ---> BACKGROUND B0
+	// ==================== BACKGROUND B0 ====================//
+
 		for (UInt_t bb = 0; bb < nBKG_B0; bb++){
 			Bidx = B0_BKG_idx[bb];
 			RecoPartFillP4(Bidx);
@@ -350,7 +367,7 @@ void SGNvsBKGvariables::Loop() {
 			LxySign_B0_B = B0_lxySign_PV[Bidx];
 			CosAlpha_B0_B = B0_cosAlpha_PV[Bidx];
 
-			DR_Pi1B0_B = ROOT::Math::VectorUtil::DeltaR(P4_Reco_K0trk1, P4_Reco_B0);
+			DR_Pi1B0_B = ROOT::Math::VectorUtil::DeltaR(P4_Reco_Pi1, P4_Reco_B0);
 			pT_Pi1_B = P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt(); 
 			pT_Rho_B = P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx];
 			D0_Rho_B = B0_PiPi_pi1_d0sig[Bidx]; 
@@ -381,6 +398,8 @@ void SGNvsBKGvariables::Loop() {
 
 	h_SGN_Rho_M.Write();
 	h_BKG_Rho_M.Write();
+	h_SGN_X3872_M.Write();
+	h_SGN_K0s_M.Write();
 
 	h_SGN_B0vsX_M.Write();
 	h_BKGk_B0vsX_M.Write();
@@ -533,22 +552,6 @@ void SGNvsBKGvariables::BookTreeTMVA(){
 
 }//BookTreeTMVA()
 
-void SGNvsBKGvariables::WriteSaveTrees(){
-
-
-	TMVAoutFile_ = new TFile(outFilePath_, "RECREATE");
-	if (!TMVAoutFile_->IsOpen() ){
-		std::cout << "ERROR : cannot open file "<< outFilePath_ << std::endl;
-		exit(-1);}
-	std::cout << "Writing output TTree in file "<< outFilePath_ << "\n" << std::endl;
-	TMVAoutFile_->cd();
-
-	TMVAoutTreeSGN_->Write();
-	TMVAoutTreeBKG_->Write();
-
-	TMVAoutFile_->Close();
-
-}//WriteSaveTrees()
 
 int SGNvsBKGvariables::RecoPartFillP4(const int Bidx){
 	int TrackQualityCheck = 1;
@@ -610,3 +613,6 @@ float SGNvsBKGvariables::DeltaPhi_RestFrameB0(const int Bidx){
 	return Dphi;
 
 }//DeltaPhi_RestFrameB0()
+
+
+
