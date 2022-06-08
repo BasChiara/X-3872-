@@ -21,14 +21,6 @@ std::string Data2017_D = "root://xrootd-cms.infn.it//store/user/crovelli/Charmon
 std::string Data2017_E = "";
 
 
-TString LxP_DirPath_MAP(const TString dataset){
-	std::map <TString , TString> LxP_DirPath{};
-	
-	LxP_DirPath["MC"] = MCdata2017;
-	LxP_DirPath["data17B"] = Data2017_B;
-	
-	return LxP_DirPath[dataset];
-}
 int LxP_DirNum_MAP(const TString dataset){
 	std::map <TString , int> LxP_DirNum{};
 	
@@ -38,15 +30,6 @@ int LxP_DirNum_MAP(const TString dataset){
 	return LxP_DirNum[dataset];
 }
 
-TString T2_DirName_MAP(const TString dataset){
-	std::map <TString , TString> T2_DirName{};
-	
-	T2_DirName["data17C"] = Data2017_C;
-	T2_DirName["data17D"] = Data2017_D;
-	T2_DirName["data17E"] = Data2017_E;
-
-	return T2_DirName[dataset];
-}
 int T2_DirNum_MAP(const TString dataset){
 	std::map <TString , int> T2_DirNum{};
 	
