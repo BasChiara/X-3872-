@@ -1,0 +1,6 @@
+// SET THE APPLICATION YOU NEED
+//
+// 1 = HLTapply --> HLT SELECTION ON 2017 DATASET + B0 SIDEBANDS OUTPUT
+//
+
+#define Application 1
