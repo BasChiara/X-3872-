@@ -118,7 +118,7 @@ void HLTapply::Loop() {
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       if (jentry +1  == Nbreak) break;    
-      if ((jentry+1) % NPrint==0) cout << "--> " << Form("%3.1f",(float)(jentry+1)/nentries* 100.) << " \%"<< endl;
+      if ((jentry+1) % NPrint==0) std::cout << "--> " << Form("%3.1f",(float)(jentry+1)/nentries* 100.) << " \%"<< std::endl;
 
       // --> Check if TRIGGER is ON
       isTriggerON = (bool)HLT_DoubleMu4_JpsiTrk_Displaced;
@@ -300,7 +300,7 @@ void HLTapply::GetFitParams(){
 	float M1, M2, S1, S2;
 
 	// --- B0 FIT 
-	ifstream inFileParB0(FileFitParB0);	
+	std::ifstream inFileParB0(FileFitParB0);	
 	if(!inFileParB0.is_open()) std::cout << "ERROR cannot open " << FileFitParB0 << std::endl;
 	while(!inFileParB0.eof()){
 
@@ -318,7 +318,7 @@ void HLTapply::GetFitParams(){
 
 	// --- K0s FIT 
 	Nline = 0;
-	ifstream inFileParK0s(FileFitParK0s);	
+	std::ifstream inFileParK0s(FileFitParK0s);	
 	if(!inFileParK0s.is_open()) std::cout << "ERROR cannot open " << FileFitParK0s << std::endl;
 	while(!inFileParK0s.eof()){
 
@@ -336,7 +336,7 @@ void HLTapply::GetFitParams(){
 
 	// --- X FIT 
 	Nline = 0;
-	ifstream inFileParX(FileFitParX);	
+	std::ifstream inFileParX(FileFitParX);	
 	if(!inFileParX.is_open()) std::cout << "ERROR cannot open " << FileFitParX << std::endl;
 	while(!inFileParX.eof()){
 
