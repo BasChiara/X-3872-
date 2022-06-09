@@ -18,8 +18,7 @@ std::string MCdata2017 = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0T
 std::string Data2017_B = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/Xdata2017_2022May17/Charmonium/crab_data_Run2017B/220517_110819/";
 std::string Data2017_C = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017C/Run2017C_";
 std::string Data2017_D = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017D/Run2017D_";
-std::string Data2017_E = "";
-
+std::string Data2017_E = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017E/Run2017E_";
 
 int LxP_DirNum_MAP(const TString dataset){
 	std::map <TString , int> LxP_DirNum{};
@@ -35,7 +34,7 @@ int T2_DirNum_MAP(const TString dataset){
 	
 	T2_DirNum["data17C"] = 3;
 	T2_DirNum["data17D"] = 2;
-	T2_DirNum["data17E"] = 0;
+	T2_DirNum["data17E"] = 3;
 	
 	return T2_DirNum[dataset];
 }
@@ -71,6 +70,10 @@ TChain* LoadTree(TString dataset = "MC"){
 		T2DirName.push_back(Data2017_D); 
 		T2_Ndir.push_back(T2_DirNum_MAP("data17D")); 
 	}
+	if (dataset == "data17E" or dataset == "data17"){
+		T2DirName.push_back(Data2017_E); 
+		T2_Ndir.push_back(T2_DirNum_MAP("data17E")); 
+	}
 	
 
 	int Nfiles = 0;
@@ -78,7 +81,7 @@ TChain* LoadTree(TString dataset = "MC"){
 	TChain* chain =new TChain("Events");
 
 	
-	for (int s = 0; s < LxPlusDirPath.size(); s++){
+	for (unsigned int s = 0; s < LxPlusDirPath.size(); s++){
 
 		struct dirent* file = NULL; // entry in the directory
 		struct stat file_stats;
@@ -111,7 +114,7 @@ TChain* LoadTree(TString dataset = "MC"){
 	}
 	if (dataset == "data17") cout<<" Number of events: " <<chain->GetEntries()<<std::endl;
 	//================ LOADING FILES FROM T2 
-	for (int s = 0; s < T2DirName.size(); s++){
+	for (unsigned int s = 0; s < T2DirName.size(); s++){
 		if (dataset == "data17D" or dataset == "data17")	std::cout << " ===== READING RUN2 2017(D) data ===== " << std::endl;
 		for (int d = 0; d < T2_Ndir[s]; d++ ){
 			tree_path = T2DirName[s] + Form("%.4d", d) + ".root" + tree_name; 
