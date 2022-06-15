@@ -3,6 +3,10 @@
 // CONSTRUCTOR-DESTRUCTOR
 TriggerSelection::TriggerSelection(TTree *tree) : B0toX3872K0s(tree){ 
 
+	FileFitParB0 = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/B0params.txt";
+	FileFitParK0s= "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/K0sparams.txt";
+	FileFitParX  = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/X3872params.txt";
+
    GenMumP4.SetM(mMuon); GenMupP4.SetM(mMuon);
    GenPimP4.SetM(mPion); GenPipP4.SetM(mPion);
    GenK0sP4.SetM(mK0s);
@@ -36,6 +40,7 @@ void TriggerSelection::Loop() {
    bool ToCountJPsi = true, ToCountRho = true, ToCountX = true, ToCountK0s = true;
    bool isTriggerON, isTrkQC, isSel_MuMu, isSel_Trk, isSel_Pim, isSel_Pip;
 	bool isMCmatched_JPsi, isMCmatched_Pi1, isMCmatched_Pi2, isMCmatched_Rho, isMCmatched_X3872, isMCmatched_K0s, isMCmatched_B0;	
+	bool isSGNregion_X3872 = true, isSGNregion_K0s = true;
 	bool inBKGregion_Pi1 = true, inBKGregion_Pi2 = true, inBKGregion_K0s = true;
 
    int SelMu1_idx = -1, SelMu2_idx = -1;
@@ -49,6 +54,9 @@ void TriggerSelection::Loop() {
 
 	// ----- OUTPUT TREE SETUP ----- //
 	OutTree_setup();
+
+	// ----- LOAD FIT PARAMS ----- //
+	GetFitParams();
 
 	// ----- HISTOGRAMS ----- //
 	// ---- MC truth matching algorithm ----//
@@ -91,19 +99,21 @@ void TriggerSelection::Loop() {
 	TH1F h_PREfit_SGN_JPsiPi_M("PREfit_SGN_JPsiPi_M", "", nbins, Mlow, Mhigh);
 	TH1F h_PREfit_BKG_JPsiPi_M("PREfit_BKG_JPsiPi_M", "", nbins, Mlow, Mhigh);
 
-	Mlow = 3.67; Mhigh = 4.07;
+   nbins = 100;
+	Mlow = 3.7; Mhigh = 4.05;
 	TH1F h_PREfit_SGN_X3872_M("PREfit_SGN_X3872_M", "X(3872)", nbins, Mlow, Mhigh);	
 	TH1F h_PREfit_BKG_X3872_M("PREfit_BKG_X3872_M", "X(3872)", nbins, Mlow, Mhigh);	
 	TH1F h_TOTfit_SGN_X3872_M("TOTfit_SGN_X3872_M", "X(3872)", nbins, Mlow, Mhigh);	
 	TH1F h_TOTfit_BKG_X3872_M("TOTfit_BKG_X3872_M", "X(3872)", nbins, Mlow, Mhigh);	
 
-	Mlow = 0.45; Mhigh = 0.55;
+	Mlow = 0.38; Mhigh = 0.62;
 	TH1F h_PREfit_SGN_K0s_M("PREfit_SGN_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
 	TH1F h_PREfit_BKG_K0s_M("PREfit_BKG_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
 	TH1F h_VTXfit_SGN_K0s_M("VTXfit_SGN_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
 	TH1F h_VTXfit_BKG_K0s_M("VTXfit_BKG_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
 	TH1F h_VTXfit_BKG_B0picco_K0s_M("VTXfit_BKG_B0picco_K0s_M", "", nbins, Mlow, Mhigh);	
 
+	nbins = 50;
 	Mlow = 5.; Mhigh = 5.5;
 	TH1F h_PREfit_SGN_B0_M("PREfit_SGN_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
 	TH1F h_PREfit_BKG_B0_M("PREfit_BKG_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
@@ -121,7 +131,7 @@ void TriggerSelection::Loop() {
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       if (jentry +1  == Nbreak) break;    
-      if ((jentry+1) % NPrint==0) cout << "--> " << (float)(jentry+1)/nentries* 100. << " \%"<< endl;
+      if ((jentry+1) % NPrint==0) cout << "--> " << Form("%3.0f", (float)(jentry+1)/nentries* 100.) << " \%"<< endl;
 
       // --> Check if TRIGGER is ON
       isTriggerON = (bool)HLT_DoubleMu4_JpsiTrk_Displaced;
@@ -207,10 +217,12 @@ void TriggerSelection::Loop() {
 			if(!isMCmatched_Pi2 && !inBKGregion("Pi2")) continue;
 			isMCmatched_Rho = isMCmatched_Pi1 && isMCmatched_Pi2; 
 
+			//PrintGenLevel(b, isPip, isMCmatched_Pi1, isMCmatched_Pi2 );	
 			ToCountRho = (prevPi1_idx != B0_pi1_idx[b]) || (prevPi2_idx != B0_pi2_idx[b]) ;
 
 			if(isMCmatched_Rho && ToCountRho){
 				h_PREfit_SGN_Rho_M.Fill(PiPi_M);
+				//if (PiPi_M < 0.7) DebugRho();
 				Nmatch_Rho++;
 			}else if (ToCountRho ){ 
 				h_PREfit_BKG_Rho_M.Fill(PiPi_M);
@@ -231,6 +243,8 @@ void TriggerSelection::Loop() {
 				h_PREfit_BKG_X3872_M.Fill(MuMuPiPi_M);
 				h_TOTfit_BKG_X3872_M.Fill(B0_finalFit_X_mass[b]);
 			}  
+			isSGNregion_X3872 = ( B0_finalFit_X_mass[b] > MX_nearLeft ) && ( B0_finalFit_X_mass[b] < MX_nearRight );
+
 			//... K0s
 			isMCmatched_K0s = (fabs(ROOT::Math::VectorUtil::DeltaR(GenK0sP4, P4_Reco_K0s) - MCmatch_K0s_DRmin) < 0.0001) && (MCmatch_K0s_Idx  >= 0); //(MCmatch_K0s_Idx == B0_k0short_idx[b]);
 			ToCountK0s = B0_k0short_idx[b] != prevK0s_idx;
@@ -240,13 +254,15 @@ void TriggerSelection::Loop() {
 				h_PREfit_SGN_K0s_M.Fill(P4_Reco_K0s.M());
 				h_VTXfit_SGN_K0s_M.Fill(B0_K0s_nmcFitted_mass[b]);
 			}else if (ToCountK0s){
-				MCmiss_K0s_B0Idx.push_back(b);
 				h_PREfit_BKG_K0s_M.Fill(P4_Reco_K0s.M());
 				h_VTXfit_BKG_K0s_M.Fill(B0_K0s_nmcFitted_mass[b]);
 			}
 			prevK0s_idx = B0_k0short_idx[b];
+			isSGNregion_K0s = ( B0_K0s_nmcFitted_mass[b] > MK0s_nearLeft) && ( B0_K0s_nmcFitted_mass[b] < MK0s_nearRight );
+			
+
 			//...B0
-			if (isMCmatched_JPsi && isMCmatched_Rho && isMCmatched_K0s){
+			if (isMCmatched_JPsi && isMCmatched_Rho && isMCmatched_K0s && isSGNregion_X3872 && isSGNregion_K0s){
 				// TTree variables 
 				B0_SGN_idx = b;
 				Nmatch_B0++;
@@ -355,9 +371,65 @@ void TriggerSelection::Loop() {
 }//Loop ()
 
 
+void TriggerSelection::GetFitParams(){
+	
+	std::string line;
+	int Nline = 0;
+
+	char ParName[30];
+	double err;
+	/*// --- B0 FIT 
+	std::ifstream inFileParB0(FileFitParB0);	
+	if(!inFileParB0.is_open()) std::cout << "ERROR cannot open " << FileFitParB0 << std::endl;
+	while(!inFileParB0.eof()){
+
+		getline(inFileParB0, line); Nline++;
+		//std::cout << Nline << "\t" << line << std::endl;
+		if(line.c_str()[0] == '#') continue;
+		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearRight);
+		if(Nline == 5) sscanf(line.c_str(), "%s %lf", ParName, &MB_farRight);
+		if(Nline == 6) sscanf(line.c_str(), "%s %lf", ParName, &MB_farLeft);
+	}
+	inFileParB0.close();*/
+
+	// --- K0s FIT 
+	Nline = 0;
+	std::ifstream inFileParK0s(FileFitParK0s);	
+	if(!inFileParK0s.is_open()) std::cout << "ERROR cannot open " << FileFitParK0s << std::endl;
+	while(!inFileParK0s.eof()){
+
+		getline(inFileParK0s, line); Nline++;
+		if(line.c_str()[0] == '#') continue;
+
+		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MK0s_nearLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MK0s_nearRight);
+	}
+	inFileParK0s.close();
+
+	// --- X FIT 
+	Nline = 0;
+	std::ifstream inFileParX(FileFitParX);	
+	if(!inFileParX.is_open()) std::cout << "ERROR cannot open " << FileFitParX << std::endl;
+	while(!inFileParX.eof()){
+
+		getline(inFileParX, line); Nline++;
+		if(line.c_str()[0] == '#') continue;
+
+		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MX_nearLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MX_nearRight);
+	}
+	inFileParX.close();
+
+	std::cout << " ---> MASS FIT RESULTS " << std::endl;
+	//std::cout << "    B0 sidebands   [" << MB_farLeft << "," << MB_nearLeft << "]" << " + [" << MB_nearRight << "," << MB_farRight << "]"  <<std::endl; 
+	std::cout << " X(3872) SGNregion [" << MX_nearLeft << "," << MX_nearRight << "]" << std::endl; 
+	std::cout << "   K0s SGNregion   [" << MK0s_nearLeft << "," << MK0s_nearRight << "]" << std::endl; 
+	
+}//GetFitParams()
 
 void TriggerSelection::GenPartFillP4(){
-   UInt_t MumIdx = -1, MupIdx = -1, PimIdx = -1 , PipIdx = -1, K0sIdx = -1;
+   UInt_t MumIdx = -1, MupIdx = -1, PimIdx = -1 , PipIdx = -1, K0sIdx = -1, RhoIdx = -1;
    for (UInt_t g = 0; g < nGenPart; g++){
       if( (GenPart_pdgId[g] ==  isMum) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isJPsi)) MumIdx = g;
       if( (GenPart_pdgId[g] == -isMum) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isJPsi)) MupIdx = g;
@@ -367,6 +439,7 @@ void TriggerSelection::GenPartFillP4(){
       if( (GenPart_pdgId[g] ==  isPip) &&  
 			 (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isRho) &&
 			(GenPart_pdgId[GenPart_genPartIdxMother[GenPart_genPartIdxMother[g]]] == isX3872)	) PipIdx = g;
+      if( (GenPart_pdgId[g] ==  isRho) &&  (abs(GenPart_pdgId[GenPart_genPartIdxMother[g]]) == isX3872)) RhoIdx = g;
       if( (GenPart_pdgId[g] ==  isK0s) &&  (abs(GenPart_pdgId[GenPart_genPartIdxMother[g]]) == abs(isB0))) K0sIdx = g;
 
    }//on generated ptl
@@ -375,12 +448,14 @@ void TriggerSelection::GenPartFillP4(){
       GenMumP4.SetPt(GenPart_pt[MumIdx]);   
       GenMumP4.SetEta(GenPart_eta[MumIdx]);
       GenMumP4.SetPhi(GenPart_phi[MumIdx]); 
+		//std::cout << "Mu - == pt " << GenMumP4.Pt() << " eta " << GenMumP4.Eta() << " mass " << GenPart_mass[MumIdx] << std::endl;
    } else std::cout << "No generated mu- is found" << std::endl;   
 
    if(MupIdx > 0){
       GenMupP4.SetPt(GenPart_pt[MupIdx]);
       GenMupP4.SetEta(GenPart_eta[MupIdx]);
       GenMupP4.SetPhi(GenPart_phi[MupIdx]);
+		//std::cout << "Mu + == pt " << GenMupP4.Pt() << " eta " << GenMupP4.Eta() << " mass " << GenPart_mass[MupIdx] << std::endl;
 
    }else std::cout << "No generated mu+ is found" << std::endl;
 
@@ -389,14 +464,22 @@ void TriggerSelection::GenPartFillP4(){
       GenPimP4.SetPt(GenPart_pt[PimIdx]);   
       GenPimP4.SetEta(GenPart_eta[PimIdx]); 
       GenPimP4.SetPhi(GenPart_phi[PimIdx]); 
+		//std::cout << "Pi - == pt " << GenPimP4.Pt() << " eta " << GenPimP4.Eta() << " mass " << GenPart_mass[PimIdx] << std::endl;
    }else std::cout << "No generated pi- is found" << std::endl;
-   if(PimIdx > 0){
+   if(PipIdx > 0){
 
       GenPipP4.SetPt(GenPart_pt[PipIdx]);
       GenPipP4.SetEta(GenPart_eta[PipIdx]);
       GenPipP4.SetPhi(GenPart_phi[PipIdx]);
+		//std::cout << "Pi + == pt " << GenPipP4.Pt() << " eta " << GenPipP4.Eta() << " mass " << GenPart_mass[PipIdx] << std::endl;
    }else std::cout << "No generated pi+ is found" << std::endl;
-
+	// Rho
+   if(RhoIdx > 0 ){
+      GenRhoP4.SetPt(GenPart_pt[RhoIdx]);
+      GenRhoP4.SetEta(GenPart_eta[RhoIdx]);
+      GenRhoP4.SetPhi(GenPart_phi[RhoIdx]);
+      GenRhoP4.SetM(GenPart_mass[RhoIdx]);
+   }else std::cout << "No generated Rho is found" << std::endl;
 
    // K0s
    if(K0sIdx > 0 ){
@@ -787,7 +870,7 @@ void TriggerSelection::NRho_per_K0s(TH1* histo){
 
 
 
-void TriggerSelection::PrintGenLevel(const int Bidx, const int ptlID, const bool isMCmatched_Pi1, const bool isMCmatched_Pi2, TH1* DRhisto){
+void TriggerSelection::PrintGenLevel(const int Bidx, const int ptlID, const bool isMCmatched_Pi1, const bool isMCmatched_Pi2 ){
 	ROOT::Math::PtEtaPhiMVector P4_Gen(0., 0., 0., mPion);
 
    for (UInt_t g = 0; g < nGenPart; g++){
@@ -795,7 +878,7 @@ void TriggerSelection::PrintGenLevel(const int Bidx, const int ptlID, const bool
 
 			P4_Gen.SetPt(GenPart_pt[g]); P4_Gen.SetEta(GenPart_eta[g]); P4_Gen.SetPhi(GenPart_phi[g]);
 			if (!isMCmatched_Pi1){ 
-				DRhisto->Fill(ROOT::Math::VectorUtil::DeltaR(P4_Gen, P4_Reco_Pi1));
+				//DRhisto->Fill(ROOT::Math::VectorUtil::DeltaR(P4_Gen, P4_Reco_Pi1));
 				if (ROOT::Math::VectorUtil::DeltaR(P4_Gen, P4_Reco_Pi1) < 0.05 ){
 					std::cout << "RECO --> NON matching pi1\t" << "pT " << P4_Reco_Pi1.Pt() <<  "\teta " << P4_Reco_Pi1.Eta() <<  "\tphi " << P4_Reco_Pi1.Phi()<< "idx " << B0_pi1_idx[Bidx] << std::endl;
 					std::cout << "GEN --> PTL mother " << GenPart_pdgId[GenPart_genPartIdxMother[g]] << "--> " << GenPart_pdgId[GenPart_genPartIdxMother[GenPart_genPartIdxMother[g]]]<< "\tpT " << GenPart_pt[g] << "\teta " << GenPart_eta[g] << "\tphi " << GenPart_phi[g] << std::endl;
@@ -804,7 +887,7 @@ void TriggerSelection::PrintGenLevel(const int Bidx, const int ptlID, const bool
 				} 
 			}
 			if (!isMCmatched_Pi2){
-				DRhisto->Fill(ROOT::Math::VectorUtil::DeltaR(P4_Gen, P4_Reco_Pi2));
+				//DRhisto->Fill(ROOT::Math::VectorUtil::DeltaR(P4_Gen, P4_Reco_Pi2));
 				if (ROOT::Math::VectorUtil::DeltaR(P4_Gen, P4_Reco_Pi2) < 0.05 ){
 					std::cout << "RECO --> NON matching pi2\t" << "pT " << P4_Reco_Pi2.Pt() <<  "\teta " << P4_Reco_Pi2.Eta() <<  "\tphi " << P4_Reco_Pi2.Phi() << std::endl;
 					std::cout << "GEN --> PTL mother " << GenPart_pdgId[GenPart_genPartIdxMother[g]]<< "--> " << GenPart_pdgId[GenPart_genPartIdxMother[GenPart_genPartIdxMother    [g]]] << "\tpT " << GenPart_pt[g] << "\teta " << GenPart_eta[g] << "\tphi " << GenPart_phi[g] << std::endl;
@@ -816,3 +899,23 @@ void TriggerSelection::PrintGenLevel(const int Bidx, const int ptlID, const bool
 	}
 }//PrintGenLevel()
 
+
+void TriggerSelection::DebugRho(){
+		
+		ROOT::Math::PtEtaPhiMVector P4_Rho(0., 0., 0., 0.);
+		
+		std::cout << "--- GENERATOR ---"<< std::endl;
+		std::cout << "Pi - == pt " << GenPimP4.Pt() << " eta " << GenPimP4.Eta() << " mass " << GenPimP4.M() << std::endl;
+		std::cout << "Pi + == pt " << GenPipP4.Pt() << " eta " << GenPipP4.Eta() << " mass " << GenPipP4.M() << std::endl;
+		std::cout << "Rho  == pt " << GenRhoP4.Pt() << " eta " << GenRhoP4.Eta() << " mass " << GenRhoP4.M() << std::endl;
+		std::cout << "--- RECO LEVEL ---"  << std::endl;
+		std::cout << "Pi 1 == pt " << P4_Reco_Pi1.Pt() << " eta " << P4_Reco_Pi1.Eta() << " mass " << P4_Reco_Pi1.M() << std::endl;
+		std::cout << "Pi 2 == pt " << P4_Reco_Pi2.Pt() << " eta " << P4_Reco_Pi2.Eta() << " mass " << P4_Reco_Pi2.M() << std::endl;
+		std::cout << "DRmin con Pi- " << MCmatch_Pim_DRmin << "\t  DRmin con Pi+ " << MCmatch_Pip_DRmin << std::endl;
+		P4_Rho = P4_Reco_Pi1 + P4_Reco_Pi2; 
+		std::cout << "Rho == pt " << P4_Rho.Pt() << " eta " << P4_Rho.Eta() << " mass " << P4_Rho.M() << std::endl;
+
+
+
+
+} // DebugRho()
