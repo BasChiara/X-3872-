@@ -6,6 +6,8 @@ HLTapply::HLTapply(TTree *tree, const TString dataset) : PreSelDATA2017(tree){
 	dataset_ = dataset;
 	outFileHistoPath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/plots/HLTapply_" + dataset_ + ".root";
    outFileTreePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/BKG_" + dataset_ + ".root";
+	//outFileHistoPath_ = dataset_ + "_histo.root";
+   //outFileTreePath_ =  dataset_ +"_tree.root";
 	
 	FileFitParB0 = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/B0params.txt";
 	FileFitParK0s= "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/K0sparams.txt";
@@ -50,12 +52,8 @@ void HLTapply::Loop() {
 		
 	// ----- FIT PARAMETER FOR SIGNAL RANGE -----//
 	GetFitParams();
-	const float MB_nearLeft   = meanMB0  - Nmin * sigmaMB0,  MB_nearRight   = meanMB0  + Nmin * sigmaMB0;
-	const float MB_farLeft    = meanMB0  - Nmax * sigmaMB0,  MB_farRight    = meanMB0  + Nmax * sigmaMB0;  
-	std::cout << "B0 interval [" << MB_farLeft << "," << MB_nearLeft << "]" << " + [" << MB_nearRight << "," << MB_farRight << "]"  <<std::endl; 
-	const float MX_nearLeft   = meanMX   - Nmin * sigmaMX,   MX_nearRight   = meanMX   + Nmin * sigmaMX;
-	const float MK0s_nearLeft = meanMK0s - Nmin * sigmaMK0s, MK0s_nearRight = meanMK0s + Nmin * sigmaMK0s;
 	bool B0_sidebans, X_SgnRegion, K0s_SgnRegion;
+
 	// ----- OUTPUT TREE SETUP ----- //
 	OutTree_setup();
 
@@ -296,25 +294,22 @@ void HLTapply::GetFitParams(){
 	std::string line;
 	int Nline = 0;
 
-	char ParName[10];
-	float M1, M2, S1, S2;
-
+	char ParName[30];
+	double err;
 	// --- B0 FIT 
 	std::ifstream inFileParB0(FileFitParB0);	
 	if(!inFileParB0.is_open()) std::cout << "ERROR cannot open " << FileFitParB0 << std::endl;
 	while(!inFileParB0.eof()){
 
 		getline(inFileParB0, line); Nline++;
+		//std::cout << Nline << "\t" << line << std::endl;
 		if(line.c_str()[0] == '#') continue;
-
-		if(Nline == 4) sscanf(line.c_str(), "%s %f", ParName, &M1);
-		if(Nline == 5) sscanf(line.c_str(), "%s %f", ParName, &S1);
-		if(Nline == 7) sscanf(line.c_str(), "%s %f", ParName, &M2);
-		if(Nline == 8) sscanf(line.c_str(), "%s %f", ParName, &S2);
+		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearRight);
+		if(Nline == 5) sscanf(line.c_str(), "%s %lf", ParName, &MB_farRight);
+		if(Nline == 6) sscanf(line.c_str(), "%s %lf", ParName, &MB_farLeft);
 	}
 	inFileParB0.close();
-	meanMB0 = (M1 + M2)*0.5;
-	sigmaMB0 = sqrt( S1*S1 + S2*S2);
 
 	// --- K0s FIT 
 	Nline = 0;
@@ -325,14 +320,10 @@ void HLTapply::GetFitParams(){
 		getline(inFileParK0s, line); Nline++;
 		if(line.c_str()[0] == '#') continue;
 
-		if(Nline == 4) sscanf(line.c_str(), "%s %f", ParName, &M1);
-		if(Nline == 5) sscanf(line.c_str(), "%s %f", ParName, &S1);
-		if(Nline == 7) sscanf(line.c_str(), "%s %f", ParName, &M2);
-		if(Nline == 8) sscanf(line.c_str(), "%s %f", ParName, &S2);
+		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MK0s_nearLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MK0s_nearRight);
 	}
 	inFileParK0s.close();
-	meanMK0s = (M1 + M2)*0.5;
-	sigmaMK0s = sqrt( S1*S1 + S2*S2);
 
 	// --- X FIT 
 	Nline = 0;
@@ -343,19 +334,15 @@ void HLTapply::GetFitParams(){
 		getline(inFileParX, line); Nline++;
 		if(line.c_str()[0] == '#') continue;
 
-		if(Nline == 4) sscanf(line.c_str(), "%s %f", ParName, &M1);
-		if(Nline == 5) sscanf(line.c_str(), "%s %f", ParName, &S1);
-		if(Nline == 7) sscanf(line.c_str(), "%s %f", ParName, &M2);
-		if(Nline == 8) sscanf(line.c_str(), "%s %f", ParName, &S2);
+		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MX_nearLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MX_nearRight);
 	}
 	inFileParX.close();
-	meanMX = (M1 + M2)*0.5;
-	sigmaMX = sqrt( S1*S1 + S2*S2);
 
-	std::cout << " ---> MASS FIT PRESULTS " << std::endl;
-	std::cout << "  <M_B0> = " << meanMB0 << "\tS(M_B0) = " << sigmaMB0 << std::endl;
-	std::cout << "  <M_K0s> = " << meanMK0s << "\tS(M_K0s) = " << sigmaMK0s << std::endl;
-	std::cout << "  <M_X> = " << meanMX << "\tS(M_X) = " << sigmaMX << std::endl;
+	std::cout << " ---> MASS FIT RESULTS " << std::endl;
+	std::cout << "    B0 sidebands   [" << MB_farLeft << "," << MB_nearLeft << "]" << " + [" << MB_nearRight << "," << MB_farRight << "]"  <<std::endl; 
+	std::cout << " X(3872) SGNregion [" << MX_nearLeft << "," << MX_nearRight << "]" << std::endl; 
+	std::cout << "   K0s SGNregion   [" << MK0s_nearLeft << "," << MK0s_nearRight << "]" << std::endl; 
 
 	
 }//GetFitParams()
@@ -407,7 +394,7 @@ void HLTapply::OutTree_setup(){
 int HLTapply::ApplyTriggerSelection_Muons(const int Bidx){
    // TRIGGER SETTINGS 
    const float Min_Mu_pT = 4.,Max_Mu_eta = 2.5, Max_Mu_dr = 2.;
-   const float Min_MuMu_pT = 6.9, Low_MuMu_M = 2.9,  High_MuMu_M = 3.3, Max_MuMu_DCA = 0.5;
+   const float Min_MuMu_pT = 6.9, Low_MuMu_M = 3.0,  High_MuMu_M = 3.2, Max_MuMu_DCA = 0.5;
    const float Min_MuMu_LxyS = 3, Min_MuMu_cosAlpha = 0.9, Min_MuMu_SVp = 0.1;
 	
 	int mu1_idx, mu2_idx;
