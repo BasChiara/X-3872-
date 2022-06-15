@@ -18,6 +18,7 @@
 
 
 TString outFile_path = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/"; 
+TString outTree_name = "TMVAoutputsBDT.root";
 TString inFile_path = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/TMVAinputs.root";
 TString SGNtreeName = "inputSIGNAL";
 TString BKGtreeName = "inputBACKGROUND";
@@ -81,7 +82,7 @@ int TMVAClassBDT( TString myMethodList = "" )
 	TTree *background     = (TTree*)input->Get(BKGtreeName);//TreeB
  
    // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-	outFile_path.Append("TMVAoutputsBDT");
+	outFile_path.Append(outTree_name);
 	if (Use["BDTseed"] ){outFile_path.Append("_S"); outFile_path.Append(SEED);}
 	if (Use["BDTbest"] ){outFile_path.Append("_S"); outFile_path.Append(SEED);}
 	outFile_path.Append(".root");
