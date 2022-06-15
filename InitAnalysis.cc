@@ -15,7 +15,8 @@
 using namespace std;
 
 std::string MCdata2017 = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/";
-std::string Data2017_B = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/Xdata2017_2022May17/Charmonium/crab_data_Run2017B/220517_110819/";
+std::string MCcentral2017 = "root://xrootd-cms.infn.it//store/user/crovelli/BdToX3872Ks_X3872ToJPsiRho_JPsiToMuMu_RhoToPiPi_TuneCP5_13TeV-pythia8-evtgen/crab_central_signal_2017/BdToX3872Ks_X3872ToJPsiRho_JPsiToMuMu_RhoToPiPi_2017.root";
+std::string Data2017_B = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/Xdata2017_2022May17/Charmonium/crab_data_Run2017B/";
 std::string Data2017_C = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017C/Run2017C_";
 std::string Data2017_D = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017D/Run2017D_";
 std::string Data2017_E = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017E/Run2017E_";
@@ -32,9 +33,10 @@ int LxP_DirNum_MAP(const TString dataset){
 int T2_DirNum_MAP(const TString dataset){
 	std::map <TString , int> T2_DirNum{};
 	
-	T2_DirNum["data17C"] = 3;
-	T2_DirNum["data17D"] = 2;
-	T2_DirNum["data17E"] = 3;
+	T2_DirNum["signal17"] = 1;
+	T2_DirNum["data17C"]  = 3;
+	T2_DirNum["data17D"]  = 2;
+	T2_DirNum["data17E"]  = 3;
 	
 	return T2_DirNum[dataset];
 }
@@ -61,6 +63,10 @@ TChain* LoadTree(TString dataset = "MC"){
 	if (dataset == "data17B" or dataset == "data17"){ 
 		LxPlusDirPath.push_back(Data2017_B); 
 		LxP_Ndir.push_back(LxP_DirNum_MAP("data17B"));
+	}
+	if (dataset == "signal17"){
+		T2DirName.push_back(MCcentral2017); 
+		T2_Ndir.push_back(T2_DirNum_MAP("signal17")); 
 	}
 	if (dataset == "data17C" or dataset == "data17"){
 		T2DirName.push_back(Data2017_C); 
@@ -115,14 +121,21 @@ TChain* LoadTree(TString dataset = "MC"){
 	if (dataset == "data17") cout<<" Number of events: " <<chain->GetEntries()<<std::endl;
 	//================ LOADING FILES FROM T2 
 	for (unsigned int s = 0; s < T2DirName.size(); s++){
+
 		if (dataset == "data17D" or dataset == "data17")	std::cout << " ===== READING RUN2 2017(D) data ===== " << std::endl;
-		for (int d = 0; d < T2_Ndir[s]; d++ ){
-			tree_path = T2DirName[s] + Form("%.4d", d) + ".root" + tree_name; 
+		if (dataset == "signal17"){
+			tree_path =  T2DirName[s] + tree_name;
 			chain->Add(tree_path);	
 			std::cout << tree_path  << std::endl;
+		}else{
+
+			for (int d = 0; d < T2_Ndir[s]; d++ ){
+				tree_path = T2DirName[s] + Form("%.4d", d) + ".root" + tree_name; 
+				chain->Add(tree_path);	
+				std::cout << tree_path  << std::endl;
+			}
 		}
 	}
-
 	std::cout << " ... LOADING " << Nfiles << " FILES ..." << std::endl;
 	cout<<" Number of events: " <<chain->GetEntries()<<std::endl;
 
@@ -131,7 +144,7 @@ TChain* LoadTree(TString dataset = "MC"){
 }//LoadTree()
 
 
-int JustCheck(TString dataset = "MC"){
+int JustCheck(TString dataset = "signal17"){
 
 	
 	TChain* chain = LoadTree(dataset);
