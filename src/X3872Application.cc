@@ -1,8 +1,7 @@
 #include "../include/Application.hh"
-#include "./PreSelDATA2017.C"
 
 #if Application == 1
-#include "./HLTapply.C"
+#include "../include/HLTapply.h"
 #endif
 
 //C++ includes
@@ -27,7 +26,7 @@ int main(int argc, char* argv[]) {
 	char dataset[500];
 	if ( argc < 2 ){
 		std::cout << " missing argument: insert the file and the dataset you want to use :-)" << std::endl; 
-		std::cout << " X3872Application inputFile [dataset]" << std::endl;
+		std::cout << " ./X3872App inputFile [dataset]" << std::endl;
 		std::cout << " use ONLY the following options" << std::endl;
 		std::cout << "                  inputFile [MC]" << std::endl;
 		std::cout << "                  inputFile [data17B]" << std::endl;
@@ -41,7 +40,7 @@ int main(int argc, char* argv[]) {
 	strcpy(dataset, argv[2]);
 	
 	// -------------------------
-	// Loading the file
+	// Loading the file from a .txt
 	TChain *theChain = new TChain("Events");
 	char Buffer[5000];
 	char MyRootFile[10000];
