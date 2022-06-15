@@ -437,9 +437,9 @@ int TMVAClassification( TString myMethodList = "" )
 		// Define Training strategy. One could define multiple strategy string separated by the "|" delimiter
 
 		TString trainingStrategyString = ("TrainingStrategy=LearningRate=1e-2,Momentum=0.9,"
-				"ConvergenceSteps=20,BatchSize=190,TestRepetitions=5,"
+				"ConvergenceSteps=20,BatchSize=10,TestRepetitions=1,"
 				"WeightDecay=1e-4,Regularization=None,"
-				"DropConfig=0.0");
+				"DropConfig=0.0+0.5+0.5+0.5");
 
 		// General Options.
 		TString dnnOptions ("!H:V:ErrorStrategy=CROSSENTROPY:VarTransform=N:"
@@ -455,6 +455,7 @@ int TMVAClassification( TString myMethodList = "" )
 		// Multi-core CPU implementation.
 		if (Use["DNN_CPU"]) {
 			TString cpuOptions = dnnOptions + ":Architecture=CPU";
+			std:cout << "----------" << cpuOptions << std::endl;
 			factory->BookMethod(dataloader, TMVA::Types::kDL, "DNN_CPU", cpuOptions);
 		}
 	}
