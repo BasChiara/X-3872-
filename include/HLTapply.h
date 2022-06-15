@@ -1,7 +1,9 @@
 #ifndef HLTapply_h
 #define HLTapply_h
 
-//#include "../src/PreSelDATA2017.C"
+#ifdef CONDOR_ 
+#include "./PreSelDATA2017.h"
+#endif
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -73,8 +75,9 @@ class HLTapply : public PreSelDATA2017{
 		ROOT::Math::PtEtaPhiMVector P4_Reco_K0s;
 		ROOT::Math::PtEtaPhiMVector P4_Reco_B0;
 		// B0 mass sidebands
-		double sigmaMB0, sigmaMX, sigmaMK0s;
-		double meanMB0, meanMX, meanMK0s;
+		double MB_nearLeft, MB_nearRight, MB_farLeft, MB_farRight;
+		double MX_nearLeft, MX_nearRight;
+		double MK0s_nearLeft, MK0s_nearRight;
 		// B0 sidebands (TTree branches)
 		float M_B0, M_Rho, M_X3872, M_mumu, M_K0s;	
 		float pTM_B0, LxySign_B0, SVprob, CosAlpha_B0;

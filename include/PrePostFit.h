@@ -52,6 +52,7 @@ class PrePostFit : public B0toX3872K0s{
     ROOT::Math::PtEtaPhiMVector GenMumP4, GenMupP4; // muons
     ROOT::Math::PtEtaPhiMVector GenPimP4, GenPipP4; // pions
     ROOT::Math::PtEtaPhiMVector GenK0sP4;// K0s
+    ROOT::Math::PtEtaPhiMVector GenRhoP4;// K0s
 
     // MC truth matching ptl 
     // ... idx

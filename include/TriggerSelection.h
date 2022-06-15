@@ -12,6 +12,8 @@
 #include "TCanvas.h"  
 #include "TStyle.h"  
 #include <iostream>   
+#include <fstream>
+#include <stddef.h>
 #include <vector>
 #include <string>
 
@@ -32,14 +34,15 @@ class TriggerSelection : public B0toX3872K0s{
 
 		//new functions
 		void OutTree_setup();
+		void GetFitParams();
 		void GenPartFillP4();
 		int  RecoPartFillP4(const int Bidx);
 
-		void MCtruthMatching(const bool verbose = false);
+		void  MCtruthMatching(const bool verbose = false);
 		float DeltaPT(ROOT::Math::PtEtaPhiMVector genV, ROOT::Math::PtEtaPhiMVector recV);
-		bool isMCmatchingFailed();
-		void WhichPtl_MCmissed(TH1* histo);
-		void B0cand_PTLmissed(const bool isMCmatchedJPsi, const bool isMCmatchedRho, const bool isMCmatchedK0s, TH1* histo);
+		bool  isMCmatchingFailed();
+		void  WhichPtl_MCmissed(TH1* histo);
+		void  B0cand_PTLmissed(const bool isMCmatchedJPsi, const bool isMCmatchedRho, const bool isMCmatchedK0s, TH1* histo);
 
 		int  ApplyTriggerSelection_Muons(const int Bidx);
 		int  ApplyTriggerSelection_Track(const int Bidx);
@@ -48,10 +51,12 @@ class TriggerSelection : public B0toX3872K0s{
 		void NK0s_per_Rho(TH1* histo);
 		void NRho_per_K0s(TH1* histo);
 
-		void PrintGenLevel(const int Bidx, const int ptlID, const bool isMCmatched_Pi1, const bool isMCmatched_Pi2, TH1* DRhisto);
+		void PrintGenLevel(const int Bidx, const int ptlID, const bool isMCmatched_Pi1, const bool isMCmatched_Pi2);
+		void DebugRho();
 
 	private:
 		// outputs
+		std::string FileFitParB0, FileFitParK0s, FileFitParX;
 		TFile* outFileHisto_;
 		TFile* outFileTree_;
 		TTree* outTree_;
@@ -65,6 +70,7 @@ class TriggerSelection : public B0toX3872K0s{
 		ROOT::Math::PtEtaPhiMVector GenMumP4, GenMupP4; // muons
 		ROOT::Math::PtEtaPhiMVector GenPimP4, GenPipP4; // pions
 		ROOT::Math::PtEtaPhiMVector GenK0sP4;// K0s
+		ROOT::Math::PtEtaPhiMVector GenRhoP4;// Rho 
 
 		// MC truth matching ptl-idx
 		int MCmatch_Mum_Idx, MCmatch_Mup_Idx;
@@ -81,13 +87,14 @@ class TriggerSelection : public B0toX3872K0s{
 		float MCmatch_B0_DRmin;
 		float MCmatch_B0_DpT;
 		
-		// MC truth NON matching B0-idx
-		std::vector<int> MCmiss_B0_B0Idx;
-		std::vector<int> MCmiss_K0s_B0Idx;
 		// RECO tracks P4
 		ROOT::Math::PtEtaPhiMVector P4_Reco_Mu1, P4_Reco_Mu2; 
 		ROOT::Math::PtEtaPhiMVector P4_Reco_Pi1, P4_Reco_Pi2;
 		ROOT::Math::PtEtaPhiMVector P4_Reco_K0s;
+		// X & K0s Signal Region
+		double MX_nearLeft, MX_nearRight;
+		double MK0s_nearLeft, MK0s_nearRight;
+
 		// B0 analysis result (TTree branches)
 		Long64_t TriggerSel_event;
 		UInt_t nBKG_B0 ;

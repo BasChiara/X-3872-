@@ -16,6 +16,8 @@
 #include <string>
 
 #include <TMath.h>
+#include <Fit/Fitter.h>
+#include <Fit/BinData.h>
 #include "Math/Vector4D.h"
 #include <Math/GenVector/VectorUtil.h>
 #include <Math/GenVector/PtEtaPhiM4D.h>
@@ -36,7 +38,6 @@ class SGNvsBKGvariables : public B0toX3872K0s{
 		//new functions
 		int   ReadTree();
 		void  BookTreeTMVA();
-		void  WriteSaveTrees();
 		int   RecoPartFillP4(const int Bidx);
 		float DeltaPhi_RestFrameB0(const int Bidx);
 
@@ -74,14 +75,17 @@ class SGNvsBKGvariables : public B0toX3872K0s{
 		Bool_t B0_BKG_isTrueJPsi[50],B0_BKG_isTruePi1[50], B0_BKG_isTruePi2[50], B0_BKG_isTrueRho[50], B0_BKG_isTrueK0s[50];
 
 		// TMVA output tree variables
+		// --> masses
+		float M_B0_S, M_mumu_S, M_Rho_S, M_X3872_S, M_K0s_S;
+		float M_B0_B, M_mumu_B, M_Rho_B, M_X3872_B, M_K0s_B;
 		// --> B0
 		float pTM_B0_S, SVprob_S, SVchi2_S, LxySign_B0_S, CosAlpha_B0_S;
 		float pTM_B0_B, SVprob_B, SVchi2_B, LxySign_B0_B, CosAlpha_B0_B;
 		// --> pi leading & Rho
 		float DR_Pi1B0_S, pT_Pi1_S;
 		float DR_Pi1B0_B, pT_Pi1_B;
-		float pT_Rho_S, D0_Rho_S, M_Rho_S;
-		float pT_Rho_B, D0_Rho_B, M_Rho_B;
+		float pT_Rho_S, D0_Rho_S;
+		float pT_Rho_B, D0_Rho_B;
 
 
 
