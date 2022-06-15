@@ -161,7 +161,7 @@ void SGNvsBKGvariables::Loop() {
       if (ientry < 0) break;
       fChain->GetEntry(jentry); 
       if (jcand + 1  == Nbreak) break;    
-      if ((jcand + 1) % NPrint==0) cout << "--> " << (float)(jcand + 1)/NB0cand * 100. << " \%"<< endl;
+      if ((jcand + 1) % NPrint==0) cout << "--> " << Form( "%3.0f", (float)(jcand + 1)/NB0cand * 100.) << " \%"<< endl;
 
 	// ==================== SIGNAL B0 ====================//
 		if (!(B0_SGN_idx < 0)){
@@ -242,7 +242,12 @@ void SGNvsBKGvariables::Loop() {
 			pT_Pi1_S = P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt(); 
 			pT_Rho_S = P4_Reco_Rho.Pt()/B0_finalFit_pt[B0_SGN_idx];
 			D0_Rho_S = B0_PiPi_pi1_d0sig[B0_SGN_idx]; 
-			M_Rho_S = B0_finalFit_Rho_mass[B0_SGN_idx];
+
+			M_B0_S    = B0_finalFit_mass[B0_SGN_idx];
+			M_mumu_S  = B0_MuMu_fitted_mass[B0_SGN_idx];
+			M_Rho_S   = B0_finalFit_Rho_mass[B0_SGN_idx];
+			M_X3872_S = B0_finalFit_X_mass[B0_SGN_idx];
+			M_K0s_S   = B0_K0s_nmcFitted_mass[B0_SGN_idx];
 
 			TMVAoutTreeSGN_->Fill();
 			
@@ -371,7 +376,12 @@ void SGNvsBKGvariables::Loop() {
 			pT_Pi1_B = P4_Reco_Pi1.Pt()/P4_Reco_B0.Pt(); 
 			pT_Rho_B = P4_Reco_Rho.Pt()/B0_finalFit_pt[Bidx];
 			D0_Rho_B = B0_PiPi_pi1_d0sig[Bidx]; 
-			M_Rho_B = B0_finalFit_Rho_mass[Bidx];
+
+			M_B0_B    = B0_finalFit_mass[Bidx];
+			M_mumu_B  = B0_MuMu_fitted_mass[Bidx];
+			M_Rho_B   = B0_finalFit_Rho_mass[Bidx];
+			M_X3872_B = B0_finalFit_X_mass[Bidx];
+			M_K0s_B   = B0_K0s_nmcFitted_mass[Bidx];
 
 			TMVAoutTreeBKG_->Fill();
 
@@ -537,6 +547,10 @@ void SGNvsBKGvariables::BookTreeTMVA(){
 	TMVAoutTreeSGN_->Branch("pT_Rho", &pT_Rho_S, "pT_Rho/F");
 	TMVAoutTreeSGN_->Branch("D0_Rho", &D0_Rho_S, "D0_Rho/F");
 	TMVAoutTreeSGN_->Branch("M_Rho", &M_Rho_S, "M_Rho/F");
+	TMVAoutTreeSGN_->Branch("M_B0", &M_B0_S, "M_B0/F");
+	TMVAoutTreeSGN_->Branch("M_mumu", &M_mumu_S, "M_mumu/F");
+	TMVAoutTreeSGN_->Branch("M_X3872", &M_X3872_S, "M_X3872/F");
+	TMVAoutTreeSGN_->Branch("M_K0s", &M_K0s_S, "M_K0s/F");
 
 	TMVAoutTreeBKG_->Branch("pTM_B0", &pTM_B0_B, "pTM_B0/F");
 	TMVAoutTreeBKG_->Branch("SVprob", &SVprob_B, "SVprob/F");
@@ -548,6 +562,10 @@ void SGNvsBKGvariables::BookTreeTMVA(){
 	TMVAoutTreeBKG_->Branch("pT_Rho", &pT_Rho_B, "pT_Rho/F");
 	TMVAoutTreeBKG_->Branch("D0_Rho", &D0_Rho_B, "D0_Rho/F");
 	TMVAoutTreeBKG_->Branch("M_Rho", &M_Rho_B, "M_Rho/F");
+	TMVAoutTreeBKG_->Branch("M_B0", &M_B0_B, "M_B0/F");
+	TMVAoutTreeBKG_->Branch("M_mumu", &M_mumu_B, "M_mumu/F");
+	TMVAoutTreeBKG_->Branch("M_X3872", &M_X3872_B, "M_X3872/F");
+	TMVAoutTreeBKG_->Branch("M_K0s", &M_K0s_B, "M_K0s/F");
 
 
 }//BookTreeTMVA()
