@@ -5,7 +5,7 @@ ROOTGLIBS     = $(shell root-config --glibs) -lTMVA
 CXX           = g++
 CXXFLAGS      = -g -fPIC -Wno-deprecated -O -ansi -D_GNU_SOURCE -g -O2
 LD            = g++
-LDFLAGS       = -g
+LDFLAGS       = -g -lGenVector # con errori tipo 'undefined reference to `ROOT::Math::GenVector::Throw(char const*)'
 SOFLAGS       = -shared
 
 
@@ -18,7 +18,7 @@ CXXFLAGS      += $(ROOTCFLAGS)
 LIBS           = $(ROOTLIBS) 
 
 NGLIBS         = $(ROOTGLIBS) 
-GLIBS          = $(filter-out -lNew, $(NGLIBS))
+GLIBS          = $(filter-out -lNew , $(NGLIBS))
 
 INCLUDEDIR       = ./
 CXX	         += -I$(INCLUDEDIR) -I.
@@ -28,15 +28,10 @@ OUTLIB	         = $(INCLUDEDIR)/lib/
 .PREFIXES: ./lib/
 
 
-$(OUTLIB)PreSelDATA2017.o: $(INCLUDEDIR)src/PreSelDATA2017.C \
-		$(INCLUDEDIR)src/HLTapply.C
+$(OUTLIB)PreSelDATA2017.o: $(INCLUDEDIR)src/PreSelDATA2017.C 
 		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)PreSelDATA2017.o $<
 $(OUTLIB)HLTapply.o: $(INCLUDEDIR)src/HLTapply.C
 		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)HLTapply.o $<
-#$(OUTLIB)TaPJpsiSelectionNaod.o: $(INCLUDEDIR)/src/TaPJpsiSelectionNaod.cc
-#		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)TaPJpsiSelectionNaod.o $<
-#$(OUTLIB)TripletSelection.o: $(INCLUDEDIR)/src/TripletSelection.cc
-#		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)TripletSelection.o $<
 
 # ==================== BParkApp =============================================
 X3872App:$(INCLUDEDIR)/src/X3872Application.cc\
@@ -45,12 +40,16 @@ X3872App:$(INCLUDEDIR)/src/X3872Application.cc\
 			$(CXX) $(CXXFLAGS) -ldl -o X3872App $(OUTLIB)/*.o $(GLIBS) $(LDFLAGS) $ $<
 X3872App.clean:
 			 rm -f X3872App 
+MVAnalysis:$(INCLUDEDIR)src/MVAnalysis.C
+			  $(CXX) $(CXXFLAGS) -ldl -o MVAnalysis $(GLIBS) $(LDFLAGS) $ $<
 
 # ==================== reduced trees =============================================
 
 clean:
 		rm -f $(OUTLIB)*.o
 		rm -f X3872App 
+
+mva: MVAnalysis
 
 all:  X3872App
 
