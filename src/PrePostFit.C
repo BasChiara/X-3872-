@@ -50,6 +50,10 @@ void PrePostFit::Loop() {
    TH1F h_MCmatch_VTXfit_JPsi_M("MCmatch_VTXfit_JPsi_M", "", nbins, Mlow, Mhigh);
    TH1F h_MCmatch_TOTfit_JPsi_M("MCmatch_TOTfit_JPsi_M", "", nbins, Mlow, Mhigh);  
    float MuMu_M;
+	// --> PIONS
+	TH1F h_genPi_pt("genPi_pt", "", nbins, 0., 5.);
+	TH1F h_genPi_eta("genPi_eta", "", nbins, -3.5, 3.5);
+
    	// ... triggered
    	//KINEMATICS
    TH1F h_FiredMCmatch_MuMu_M("FiredMCmatch_MuMu_M", "", nbins, 2.8, 3.4);
@@ -66,7 +70,8 @@ void PrePostFit::Loop() {
    TH1F h_FiredMCmatch_Trk_d0Sign("FiredMCmatch_Trk_d0Sign", "", nbins/2., 0, 8.);
    TH1F h_FiredMCmatch_K0s_vs_RhoTrk_N("FiredMCmatch_K0s_vs_RhoTrk_N", "", 2, 0,2);
    // --> RHO
-   Mlow = 0.4, Mhigh = 1.;
+   Mlow = 0.2, Mhigh = 1.;
+   TH1F h_MCmatch_gen_Rho_M("MCmatch_gen_Rho_M", "", nbins, Mlow, Mhigh);
    TH1F h_MCmatch_prefit_Rho_M("MCmatch_prefit_Rho_M", "", nbins, Mlow, Mhigh);
    TH1F h_MCmatch_TOTfit_Rho_M("MCmatch_TOTfit_Rho_M", "", nbins, Mlow, Mhigh);
    float PiPi_M;
@@ -116,7 +121,9 @@ void PrePostFit::Loop() {
 
       // --> Find MC-truth
       GenPartFillP4();
-
+		h_MCmatch_gen_Rho_M.Fill(GenRhoP4.M());
+		h_genPi_pt.Fill(GenPimP4.Pt()); h_genPi_eta.Fill(GenPimP4.Eta());
+		h_genPi_pt.Fill(GenPimP4.Pt()); h_genPi_eta.Fill(GenPipP4.Eta());
       // --> Match MC-truth with reco tracks
       MCmatch_Mum_Idx = -1, MCmatch_Mup_Idx = -1;
       MCmatch_Pim_Idx = -1, MCmatch_Pip_Idx = -1;
@@ -287,6 +294,9 @@ void PrePostFit::Loop() {
   h_MCmatch_prefit_JPsi_M.Write();
   h_MCmatch_VTXfit_JPsi_M.Write();
   h_MCmatch_TOTfit_JPsi_M.Write();  
+  h_MCmatch_gen_Rho_M.Write();
+  h_genPi_pt.Write();
+  h_genPi_eta.Write();
   h_MCmatch_prefit_Rho_M.Write();
   h_MCmatch_TOTfit_Rho_M.Write();
   h_MCmatch_prefit_X3872_M.Write();
@@ -339,12 +349,15 @@ void PrePostFit::Loop() {
 
 
 void PrePostFit::GenPartFillP4(){
-   UInt_t MumIdx = -1, MupIdx = -1, PimIdx = -1 , PipIdx = -1, K0sIdx = -1;
+   UInt_t MumIdx = -1, MupIdx = -1, PimIdx = -1 , PipIdx = -1, RhoIdx = -1, K0sIdx = -1;
    for (UInt_t g = 0; g < nGenPart; g++){
       if( (GenPart_pdgId[g] ==  isMum) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isJPsi)) MumIdx = g;
       if( (GenPart_pdgId[g] == -isMum) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isJPsi)) MupIdx = g;
-      if( (GenPart_pdgId[g] == -isPip) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isRho)) PimIdx = g;
-      if( (GenPart_pdgId[g] ==  isPip) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isRho)) PipIdx = g;
+      if( (GenPart_pdgId[g] == -isPip) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isRho) 
+&& (GenPart_pdgId[GenPart_genPartIdxMother[GenPart_genPartIdxMother[g]]] == isX3872) ) PimIdx = g;
+      if( (GenPart_pdgId[g] ==  isPip) &&  (GenPart_pdgId[GenPart_genPartIdxMother[g]] == isRho)
+&& (GenPart_pdgId[GenPart_genPartIdxMother[GenPart_genPartIdxMother[g]]] == isX3872) ) PipIdx = g;
+      if( (GenPart_pdgId[g] ==  isRho) &&  (abs(GenPart_pdgId[GenPart_genPartIdxMother[g]]) == isX3872) ) RhoIdx = g;
       if( (GenPart_pdgId[g] ==  isK0s) &&  (abs(GenPart_pdgId[GenPart_genPartIdxMother[g]]) == abs(isB0))) K0sIdx = g;
 
    }//on generated ptl
@@ -376,6 +389,13 @@ void PrePostFit::GenPartFillP4(){
    }else std::cout << "No generated pi+ is found" << std::endl;
 
 
+   //Rho 
+   if(RhoIdx > 0 ){
+      GenRhoP4.SetPt(GenPart_pt[RhoIdx]);
+      GenRhoP4.SetEta(GenPart_eta[RhoIdx]);
+      GenRhoP4.SetPhi(GenPart_phi[RhoIdx]);
+      GenRhoP4.SetM(GenPart_mass[RhoIdx]);
+   }else std::cout << "No generated K0s is found" << std::endl;
    // K0s
    if(K0sIdx > 0 ){
       GenK0sP4.SetPt(GenPart_pt[K0sIdx]);
