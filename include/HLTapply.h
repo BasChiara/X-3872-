@@ -1,9 +1,7 @@
 #ifndef HLTapply_h
 #define HLTapply_h
 
-#ifdef CONDOR_ 
-#include "./PreSelDATA2017.h"
-#endif
+//#include "./PreSelDATA2017.h"
 
 #include <TROOT.h>
 #include <TChain.h>

@@ -4,10 +4,10 @@
 HLTapply::HLTapply(TTree *tree, const TString dataset) : PreSelDATA2017(tree){ 
 
 	dataset_ = dataset;
-	outFileHistoPath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/plots/HLTapply_" + dataset_ + ".root";
-   outFileTreePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/BKG_" + dataset_ + ".root";
-	//outFileHistoPath_ = dataset_ + "_histo.root";
-   //outFileTreePath_ =  dataset_ +"_tree.root";
+	//outFileHistoPath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/plots/HLTapply_" + dataset_ + ".root";
+   //outFileTreePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/BKG_" + dataset_ + ".root";
+	outFileHistoPath_ = dataset_ + "_histo.root";
+   outFileTreePath_ =  dataset_ +"_tree.root";
 	
 	FileFitParB0 = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/B0params.txt";
 	FileFitParK0s= "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/K0sparams.txt";
@@ -305,9 +305,9 @@ void HLTapply::GetFitParams(){
 		//std::cout << Nline << "\t" << line << std::endl;
 		if(line.c_str()[0] == '#') continue;
 		if(Nline == 3) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearLeft);
-		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearRight);
-		if(Nline == 5) sscanf(line.c_str(), "%s %lf", ParName, &MB_farRight);
-		if(Nline == 6) sscanf(line.c_str(), "%s %lf", ParName, &MB_farLeft);
+		if(Nline == 4) sscanf(line.c_str(), "%s %lf", ParName, &MB_farLeft);
+		if(Nline == 5) sscanf(line.c_str(), "%s %lf", ParName, &MB_nearRight);
+		if(Nline == 6) sscanf(line.c_str(), "%s %lf", ParName, &MB_farRight);
 	}
 	inFileParB0.close();
 
