@@ -16,9 +16,10 @@ int main (int argc, char** argv ){
 	// slicing X
 	double X_cut;
 	const double min_X = std::stod(argv[1]);
-	const double Max_X = 0.; //0.2 for large scan
+	double Max_X = 0.; //0.2 for large scan
 	double Step_X = 0.2;
 	if (argc > 3) Step_X = std::stod(argv[3]);
+	if ( Step_X >= 0.05 ) Max_X = 0.2; 
 	const int Nx = (int)((Max_X - min_X) / Step_X) + 1;
 	
 	// slicing Mrho
@@ -26,14 +27,18 @@ int main (int argc, char** argv ){
 	const double min_MRho = std::stod(argv[2]);
 	const double Max_MRho = 0.7001;
 	double Step_MRho = 0.2;
-	if (argc == 5)Step_MRho = std::stod(argv[4]);
+	if (argc == 5) Step_MRho = std::stod(argv[4]);
 	const int NmR = (int) ((Max_MRho - min_MRho) / Step_MRho) + 1;
 	std::cout << Nx << std::endl;
 	std::cout << NmR << std::endl;
 
 	// TREE output
+	TString OutFilePath = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/CutOptimization";
+	if( ( Step_X < 0.05 ) || ( Step_MRho < 0.05 ) ) OutFilePath.Append("Plus"); 
+	OutFilePath.Append(".root");
+
 	double Bs, Ss, Psig;
-	TFile* OutFile = new TFile("/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/CutOptimizationPlus.root", "RECREATE");	
+	TFile* OutFile = new TFile(OutFilePath, "RECREATE");
 	TTree* OutTree = new TTree("CutOpt", "");
 	OutTree->Branch("cut_X", &X_cut, "cut_X/D");
 	OutTree->Branch("cut_MRho", &MRho_cut, "cut_MRho/D");
@@ -66,8 +71,8 @@ int main (int argc, char** argv ){
 	}
 	OutFile->cd();
 	OutTree->Write();
+	std::cout << " \n\nWRITTEN TREE \"" << OutTree->GetName() << "\" IN FILE " << OutFilePath << std::endl;
 	
 	OutFile->Close();
-
 	return 0;
 }
