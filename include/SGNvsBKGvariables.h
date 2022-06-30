@@ -75,6 +75,8 @@ class SGNvsBKGvariables : public B0toX3872K0s{
 		Bool_t B0_BKG_isTrueJPsi[50],B0_BKG_isTruePi1[50], B0_BKG_isTruePi2[50], B0_BKG_isTrueRho[50], B0_BKG_isTrueK0s[50];
 
 		// TMVA output tree variables
+		// --> event index
+		Long64_t iEv_S, iEv_B;
 		// --> masses
 		float M_B0_S, M_mumu_S, M_Rho_S, M_X3872_S, M_K0s_S;
 		float M_B0_B, M_mumu_B, M_Rho_B, M_X3872_B, M_K0s_B;

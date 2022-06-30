@@ -249,6 +249,8 @@ void SGNvsBKGvariables::Loop() {
 			M_X3872_S = B0_finalFit_X_mass[B0_SGN_idx];
 			M_K0s_S   = B0_K0s_nmcFitted_mass[B0_SGN_idx];
 
+			iEv_S = TriggerSel_event;
+
 			TMVAoutTreeSGN_->Fill();
 			
 		}
@@ -382,6 +384,8 @@ void SGNvsBKGvariables::Loop() {
 			M_Rho_B   = B0_finalFit_Rho_mass[Bidx];
 			M_X3872_B = B0_finalFit_X_mass[Bidx];
 			M_K0s_B   = B0_K0s_nmcFitted_mass[Bidx];
+
+			iEv_B = TriggerSel_event;
 
 			TMVAoutTreeBKG_->Fill();
 
@@ -551,6 +555,7 @@ void SGNvsBKGvariables::BookTreeTMVA(){
 	TMVAoutTreeSGN_->Branch("M_mumu", &M_mumu_S, "M_mumu/F");
 	TMVAoutTreeSGN_->Branch("M_X3872", &M_X3872_S, "M_X3872/F");
 	TMVAoutTreeSGN_->Branch("M_K0s", &M_K0s_S, "M_K0s/F");
+	TMVAoutTreeSGN_->Branch("iEv", &iEv_S, "i_Ev/L");
 
 	TMVAoutTreeBKG_->Branch("pTM_B0", &pTM_B0_B, "pTM_B0/F");
 	TMVAoutTreeBKG_->Branch("SVprob", &SVprob_B, "SVprob/F");
@@ -566,6 +571,7 @@ void SGNvsBKGvariables::BookTreeTMVA(){
 	TMVAoutTreeBKG_->Branch("M_mumu", &M_mumu_B, "M_mumu/F");
 	TMVAoutTreeBKG_->Branch("M_X3872", &M_X3872_B, "M_X3872/F");
 	TMVAoutTreeBKG_->Branch("M_K0s", &M_K0s_B, "M_K0s/F");
+	TMVAoutTreeBKG_->Branch("iEv", &iEv_B, "i_Ev/L");
 
 
 }//BookTreeTMVA()
