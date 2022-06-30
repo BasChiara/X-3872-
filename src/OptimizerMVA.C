@@ -16,6 +16,7 @@
 #include "RooChebychev.h"
 #include "RooFitResult.h"
 #include "RooPlot.h"
+#include "RooCurve.h"
 using namespace RooFit;
 
 OptimizerMVA::OptimizerMVA(){
@@ -164,6 +165,45 @@ void OptimizerMVA::LoadFitRanges(){
 
 
 }//LoadFitRanges()
+
+
+void OptimizerMVA::GetCorrelation_BDT_MR(){
+
+	double CorrF;
+	const int NbinsX = 100; 
+	const double Xlow = -0.8, Xhigh = 0.5;
+	const int NbinsMR = 100; 
+	const double MRlow = 0.4, MRhigh = .9;
+	TH2F* h_CorrS = new TH2F("CorrS_XvsMrho", "", NbinsMR, MRlow, MRhigh, NbinsX, Xlow, Xhigh);	
+	TH2F* h_CorrB = new TH2F("CorrB_XvsMrho", "", NbinsMR, MRlow, MRhigh, NbinsX, Xlow, Xhigh);	
+	
+	TreeSGN->Draw("TreeBDTx_S.BDTx:M_Rho>>CorrS_XvsMrho");
+	h_CorrS->GetXaxis()->SetTitle("M(\\rho(770))\\ [GeV]");
+	h_CorrS->GetYaxis()->SetTitle("BDT response [x]");
+	h_CorrS->GetYaxis()->SetTitleOffset(1.05);
+	h_CorrS->SetLineColor(kAzure +1);
+	h_CorrS->SetFillColorAlpha(kAzure +1, 0.60);
+	TreeBKG->Draw("TreeBDTx_B.BDTx:M_Rho>>CorrB_XvsMrho");
+	h_CorrB->SetLineColor(kRed);
+	h_CorrB->SetFillColorAlpha(kRed, 0.50);
+
+
+	auto legend= new TLegend(0.525, 0.8,.89,.89);
+	legend->SetTextSize(0.025);
+	legend->SetBorderSize(0);
+	
+	TCanvas* c1 = new TCanvas("c1","canvas", 1024, 1024);	
+	gStyle->SetOptStat(0);
+	h_CorrS->Draw("BOX");
+	legend->AddEntry(h_CorrS, Form("SIGNAL (MC) Corr = %.3f", h_CorrS->GetCorrelationFactor()));
+	h_CorrB->Draw("BOX SAME");
+	legend->AddEntry(h_CorrB, Form("DATA 2017   Corr = %.3f", h_CorrB->GetCorrelationFactor()));
+	legend->Draw();
+
+	TString outPath = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/CutOptPlots/";
+	c1->SaveAs(outPath + "CorrelationBDTxMRho.png");
+
+}
 
 // ==== ANALYSIS TOOLS ==== //
 
@@ -321,10 +361,11 @@ double OptimizerMVA::BKG_NevExtraction(const double Xcut, const double MRcut){
 	
 	RooRealVar B0m("B0m", "M(B_0)\\ [GeV]", 5.07947, 5.47934);
 
-	B0m.setRange(   "SB1"    , BKGregFarL , BKGregNearL);       // SIDEBAND 1
-	B0m.setRange(   "SB2"    , BKGregNearR, BKGregFarR);        // SIDEBAND 2
-	B0m.setRange("FULLregion", BKGregFarL , BKGregFarR);        // FULLregion RANGE 
-	B0m.setRange("SGNregion" , SGNregL    , SGNregR);           // SGNregion RANGE 
+	B0m.setRange(   "SB1"      , BKGregFarL , BKGregNearL);       // SIDEBAND 1
+	B0m.setRange(   "SB2"      , BKGregNearR, BKGregFarR);        // SIDEBAND 2
+	B0m.setRange("BLINDregion" , BKGregNearL, BKGregNearR);        // SIDEBAND 2
+	B0m.setRange("FULLregion"  , BKGregFarL , BKGregFarR);        // FULLregion RANGE 
+	B0m.setRange("SGNregion"   , SGNregL    , SGNregR);           // SGNregion RANGE 
 
 	RooDataSet B0m_ds("B0m_ds","B0m_ds", RooArgSet(B0m));
 
@@ -338,7 +379,7 @@ double OptimizerMVA::BKG_NevExtraction(const double Xcut, const double MRcut){
 
 	
 	// Fermi 
-	RooRealVar Slope("Slope", "", 10.0, 1.0 , 30.);
+	RooRealVar Slope("Slope", "", 10.0, 1.0 , 50.);
 	RooRealVar Flex("Flex", "", 4., 1. , 5.2);
 	RooRealVar C("C", "", 0.5, 0. , 1.);
 	
@@ -372,8 +413,9 @@ double OptimizerMVA::BKG_NevExtraction(const double Xcut, const double MRcut){
 	//ResBKGmodel->Print("v");
 
 	// ==== SAVE RESULTS ==== //
-	RooPlot* B0m_fr = B0m.frame();
+	RooPlot* B0m_fr = B0m.frame(Bins(47));
 	B0m_ds.plotOn(B0m_fr);
+	B0m_fr->setInvisible("BLINDregion");
 	BKGmodel.plotOn(B0m_fr, Range("FULLregion"), RooFit::NormRange("SB1,SB2"));
 	BKGmodel.paramOn(B0m_fr, Layout(0.60));
 	B0m_fr->SetTitle(Form("X-cut = %.2f Mrho-cut = %.3f", Xcut, MRcut));
@@ -398,7 +440,7 @@ double OptimizerMVA::BKG_NevExtraction(const double Xcut, const double MRcut){
 	// ==== SAVE ON FILE ==== //
 	TString outFileName("/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/FitRes/FitBKG_X");
 	if (Xcut < 0.) outFileName.Append(Form("m"));
-	outFileName.Append(Form("%.0f_MR%.0f_Plus.root", fabs(Xcut)*100., MRcut*1000.));
+	outFileName.Append(Form("%.0f_MR%.0f.root", fabs(Xcut)*100., MRcut*1000.));
 
 	TFile* outFitFile = new TFile(outFileName, "RECREATE");
 	B0m_fr->Write("FitPlot");
@@ -450,4 +492,138 @@ double OptimizerMVA::PunziSign(const double S, const double B){
 
 	return PunziSign;
 
+}
+
+
+
+int OptimizerMVA::makeSGNvsBKGplot(const double Xcut, const double MRcut){
+	int Nbins = 75;
+	double Mlow = 5.0, Mhigh = 5.6;
+	TH1F* h_Data_B0 = new TH1F("Data_B0", "", Nbins, Mlow, Mhigh);
+	TH1F* h_SGN_B0  = new TH1F("SGN_B0" , "", Nbins, Mlow, Mhigh); 
+	Nbins = 30;
+	Mlow = 3.8, Mhigh = 3.95;
+	TH1F* h_Data_X  = new TH1F("Data_X", "", Nbins, Mlow, Mhigh);
+	TH1F* h_SGN_X   = new TH1F("SGN_X" , "", Nbins, Mlow, Mhigh); 
+
+	// ==== LOOP ON EVENTS ==== // 
+	// ...BKG
+	int Nb = TreeBKG->GetEntries();
+	for (int i = 0; i < Nb; i++){
+		TreeBKG->GetEntry(i);
+		if( ( X < Xcut) || ( M_Rho < MRcut) ) continue;
+		h_Data_B0->Fill(M_B0);
+		h_Data_X->Fill(M_X3872);
+	}
+	int Ns = TreeSGN->GetEntries();
+	for (int i = 0; i < Ns; i++){
+		TreeSGN->GetEntry(i);
+		if( ( X < Xcut) || ( M_Rho < MRcut) ) continue;
+		h_SGN_B0->Fill(M_B0);
+		h_SGN_X->Fill(M_X3872);
+	}
+	// Histo set-up
+	// ---> B0
+	h_SGN_B0->GetXaxis()->SetTitle("M(B_0)\\ [GeV]");
+	h_SGN_B0->GetYaxis()->SetTitle(Form("Events/%.3f [GeV]", h_SGN_B0->GetXaxis()->GetBinWidth(1)));
+	h_SGN_B0->SetLineWidth(3);
+	h_SGN_B0->SetLineColor(kAzure + 1); h_SGN_B0->SetFillColorAlpha(kAzure + 1, 0.30);
+	h_Data_B0->SetLineColor(kBlack);
+	h_Data_B0->SetMarkerStyle(20);
+	h_Data_B0->SetLineWidth(2);
+	// ---> X(3872)
+	h_SGN_X->GetXaxis()->SetTitle("M(X)\\ [GeV]");
+	h_SGN_X->GetYaxis()->SetTitle(Form("Events/%.3f [GeV]", h_SGN_X->GetXaxis()->GetBinWidth(1)));
+	h_SGN_X->SetLineWidth(3);
+	h_SGN_X->SetLineColor(kViolet + 1); h_SGN_X->SetFillColorAlpha(kViolet + 1, 0.30);
+	h_Data_X->SetLineColor(kBlack);
+	h_Data_X->SetMarkerStyle(20);
+	h_Data_X->SetLineWidth(2);
+
+	// get FIT
+	TFile* inFile = new TFile("/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/FitRes/FitBKG_Xm1_MR695.root");
+	RooPlot* FitPlot = (RooPlot*)inFile->Get("FitPlot");
+	RooCurve* FitCurve = (RooCurve*)FitPlot->getObject(1);
+	FitCurve->SetLineColor(kRed);
+
+	// Legend 
+	auto legendB0 = new TLegend(0.60, 0.75,.89,.89);
+	legendB0->SetTextSize(0.025);
+	legendB0->SetBorderSize(0);
+	auto legendX= new TLegend(0.60, 0.80,.89,.89);
+	legendX->SetTextSize(0.025);
+	legendX->SetBorderSize(0);
+
+	TCanvas* c1 = new TCanvas("c1","canvas", 1024, 1024);
+	gStyle->SetOptStat(0);
+	h_SGN_B0->Scale(SGNfactor);
+	h_SGN_B0->Draw("HIST");
+	legendB0->AddEntry(h_SGN_B0, "SIGNAL (MC)");
+	h_Data_B0->Draw("PE0 SAME");
+	legendB0->AddEntry(h_Data_B0, "DATA 2017");
+	FitCurve->Draw("SAME");
+	legendB0->AddEntry(FitCurve, "SIDEBANDS-FIT");
+
+	legendB0->Draw();
+	TString outPath = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/CutOptPlots/";
+	c1->SaveAs(outPath + "B0massCUT.png");
+
+	h_SGN_X->Scale(SGNfactor);
+	h_SGN_X->Draw("HIST");
+	legendX->AddEntry(h_SGN_X, "SIGNAL (MC)");
+	h_Data_X->Draw("PE0 SAME");
+	legendX->AddEntry(h_Data_X, "DATA 2017");
+	legendX->Draw();
+	c1->SaveAs(outPath + "X3872massCUT.png");
+
+	inFile->Close();
+	return 0;
+}
+
+
+int OptimizerMVA::makeMASSplot2D(const double Xcut, const double MRcut){
+
+	int Nbins = 50;
+	double Mlow_B0 = 5.20 , Mhigh_B0 = 5.40;
+	double Mlow_X  = 3.80 , Mhigh_X  = 3.95;
+	double Mlow_K0s= 0.45 , Mhigh_K0s= 0.55; 
+	TH2F* h_XvsB0_m   = new TH2F( "XvsB0_m" , "", Nbins, Mlow_B0 , Mhigh_B0,  Nbins, Mlow_X  , Mhigh_X  );
+	TH2F* h_K0svsB0_m = new TH2F("K0svsB0_m", "", Nbins, Mlow_B0 , Mhigh_B0,   Nbins, Mlow_K0s, Mhigh_K0s); 
+	TH2F* h_XvsK0s_m  = new TH2F("XvsK0s_m" , "", Nbins, Mlow_K0s, Mhigh_K0s , Nbins, Mlow_X, Mhigh_X); 
+
+	TString CutOpt = Form("TreeBDTx_S.BDTx>%f && M_Rho>%f", Xcut, MRcut);
+	TString CutOptB = Form("TreeBDTx_B.BDTx>%f && M_Rho>%f", Xcut, MRcut);
+	std::cout << CutOpt << std::endl;
+	TreeSGN->Draw("M_X3872:M_B0>>XvsB0_m",  CutOpt); 
+	h_XvsB0_m->SetFillColor(kAzure+1);
+	h_XvsB0_m->GetXaxis()->SetTitle("M(B_0)\\ [GeV]");
+	h_XvsB0_m->GetYaxis()->SetTitle("M(X)\\ [GeV]");
+	TreeSGN->Draw("M_K0s:M_B0>>K0svsB0_m", CutOpt); 
+	h_K0svsB0_m->SetFillColor(kGreen);
+	h_K0svsB0_m->GetXaxis()->SetTitle("M(B_0)\\ [GeV]");
+	h_K0svsB0_m->GetYaxis()->SetTitle("M(K_0^s)\\ [GeV]");
+	TreeSGN->Draw("M_X3872:M_K0s>>XvsK0s_m", CutOpt); 
+	h_XvsK0s_m->SetFillColor(kViolet);
+	h_XvsK0s_m->GetXaxis()->SetTitle("M(K_0^s)\\ [GeV]");
+	h_XvsK0s_m->GetYaxis()->SetTitle("M(X)\\ [GeV]");
+
+	
+	TString outPath = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/CutOptimization/CutOptPlots/";
+	TCanvas* c1 = new TCanvas("c1","canvas", 1024, 1024);
+	gStyle->SetOptStat(0);
+	TPad* pad = new TPad("pad", "", 0.,0.,1., 1.);
+	pad->SetLeftMargin(0.15); 
+	pad->Draw();
+	pad->cd();
+	h_XvsB0_m->Draw("BOX");
+	pad->Update();
+	c1->SaveAs(outPath + "M_X3872vsM_B0.png");
+	h_K0svsB0_m->Draw("BOX");
+	pad->Update();
+	c1->SaveAs(outPath + "M_K0svsM_B0.png");
+	h_XvsK0s_m->Draw("BOX");
+	pad->Update();
+	c1->SaveAs(outPath + "M_X3872vsM_K0s.png");
+
+	return 0;
 }

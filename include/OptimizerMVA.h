@@ -18,6 +18,10 @@
  
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TCanvas.h"
+#include "TPad.h"
+#include "TLegend.h"
+#include <TStyle.h>
 
 #include "TMVA/Tools.h"
 #include "TMVA/Reader.h"
@@ -37,12 +41,15 @@ public:
 
 	// getters
 	TFile* GetFile(TString file); 
+	void GetCorrelation_BDT_MR();
 
 	// analysis methods 
 	int ApplyBDT();
 	double BKG_NevExtraction(const double Xcut, const double MRcut);
 	double SGN_NevExtraction(const double Xcut, const double MRcut);
 	double PunziSign(const double S, const double B);
+	int    makeSGNvsBKGplot(const double Xcut, const double MRcut);
+	int    makeMASSplot2D(const double Xcut, const double MRcut);
 
 
 private:
