@@ -99,7 +99,6 @@ void TriggerSelection::Loop() {
 	TH1F h_PREfit_SGN_JPsiPi_M("PREfit_SGN_JPsiPi_M", "", nbins, Mlow, Mhigh);
 	TH1F h_PREfit_BKG_JPsiPi_M("PREfit_BKG_JPsiPi_M", "", nbins, Mlow, Mhigh);
 
-   nbins = 100;
 	Mlow = 3.7; Mhigh = 4.05;
 	TH1F h_PREfit_SGN_X3872_M("PREfit_SGN_X3872_M", "X(3872)", nbins, Mlow, Mhigh);	
 	TH1F h_PREfit_BKG_X3872_M("PREfit_BKG_X3872_M", "X(3872)", nbins, Mlow, Mhigh);	
@@ -109,12 +108,11 @@ void TriggerSelection::Loop() {
 	Mlow = 0.38; Mhigh = 0.62;
 	TH1F h_PREfit_SGN_K0s_M("PREfit_SGN_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
 	TH1F h_PREfit_BKG_K0s_M("PREfit_BKG_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
-	TH1F h_VTXfit_SGN_K0s_M("VTXfit_SGN_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
-	TH1F h_VTXfit_BKG_K0s_M("VTXfit_BKG_K0s_M", "\\ K_0^s", nbins, Mlow, Mhigh);	
+	TH1F h_VTXfit_SGN_K0s_M("VTXfit_SGN_K0s_M", "\\ K_0^s", nbins + 20, Mlow, Mhigh);	
+	TH1F h_VTXfit_BKG_K0s_M("VTXfit_BKG_K0s_M", "\\ K_0^s", nbins + 20, Mlow, Mhigh);	
 	TH1F h_VTXfit_BKG_B0picco_K0s_M("VTXfit_BKG_B0picco_K0s_M", "", nbins, Mlow, Mhigh);	
 
-	nbins = 50;
-	Mlow = 5.; Mhigh = 5.5;
+	Mlow = 5.; Mhigh = 5.6;
 	TH1F h_PREfit_SGN_B0_M("PREfit_SGN_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
 	TH1F h_PREfit_BKG_B0_M("PREfit_BKG_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
 	TH1F h_VTXfit_SGN_B0_M("VTXfit_SGN_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
@@ -122,7 +120,12 @@ void TriggerSelection::Loop() {
 	TH1F h_TOTfit_SGN_B0_M("TOTfit_SGN_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
 	TH1F h_TOTfit_BKG_B0_M("TOTfit_BKG_B0_M", "\\ B_0", nbins, Mlow, Mhigh);	
 
-
+	// SIGNAL HISTO TO FIT
+   nbins = 100;
+	TH1F h_SGN_X3872_M("SGN_X3872_M", "X(3872)", nbins, 3.7, 4.05);	
+	nbins = 120;
+	TH1F h_SGN_B0_M("SGN_B0_M", "\\ B_0", nbins, 5.0, 5.6);	
+	TH1F h_SGN_K0s_M("SGN_K0s_M", "\\ K_0^s", nbins, 0.38, 0.62);	
 
    // Loop on evens
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -262,14 +265,19 @@ void TriggerSelection::Loop() {
 			
 
 			//...B0
-			if (isMCmatched_JPsi && isMCmatched_Rho && isMCmatched_K0s && isSGNregion_X3872 && isSGNregion_K0s){
-				// TTree variables 
-				B0_SGN_idx = b;
-				Nmatch_B0++;
-			
-				h_PREfit_SGN_B0_M.Fill(MuMuPiPiK0s_M); 
-				h_VTXfit_SGN_B0_M.Fill(B0_fitted_mass_womc[b]);
-				h_TOTfit_SGN_B0_M.Fill(B0_finalFit_mass[b]);
+			if (isMCmatched_JPsi && isMCmatched_Rho && isMCmatched_K0s){ 
+				h_SGN_X3872_M.Fill(B0_finalFit_X_mass[b]);	
+				h_SGN_K0s_M.Fill(B0_K0s_nmcFitted_mass[b]);	
+				h_SGN_B0_M.Fill(B0_finalFit_mass[b]);	
+				if(isSGNregion_X3872 && isSGNregion_K0s){
+					// TTree variables 
+					B0_SGN_idx = b;
+					Nmatch_B0++;
+
+					h_PREfit_SGN_B0_M.Fill(MuMuPiPiK0s_M); 
+					h_VTXfit_SGN_B0_M.Fill(B0_fitted_mass_womc[b]);
+					h_TOTfit_SGN_B0_M.Fill(B0_finalFit_mass[b]);
+				}
 			}else{
 				// TTree variables 
 				B0_BKG_idx[nBKG_B0] = b;
@@ -317,6 +325,7 @@ void TriggerSelection::Loop() {
 	outFileTree_->cd();
 	outTree_->Write();
 	outFileTree_->Close();
+	std::cout << "OUTPUT tree written on file ---> ./results/B0_SGNvsBKG_anlaysis.root" << std::endl;
 
 
 	TFile* out_file = new TFile("./plots/TriggerSelection.root", "RECREATE");
@@ -364,6 +373,10 @@ void TriggerSelection::Loop() {
 	h_PREfit_BKG_B0_M.Write(); 
 	h_VTXfit_BKG_B0_M.Write(); 
 	h_TOTfit_BKG_B0_M.Write(); 
+
+	h_SGN_X3872_M.Write();
+	h_SGN_K0s_M.Write();
+	h_SGN_B0_M.Write();
 
 	out_file->Close();
 
