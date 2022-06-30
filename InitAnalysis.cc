@@ -14,7 +14,10 @@
 #include <sys/stat.h>
 using namespace std;
 
+//#define ROOT_MACRO
+
 std::string MCdata2017 = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Apr29/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220429_084035/";
+std::string MCdata2017_check = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/B0ToXKs_2022Jun20/BdToX3872Ks_X3872ToJpsiRho_BMuonFilter_DGamma0_TuneCUEP8M1_13TeV-pythia8-evtgen/crab_BdToX3872Ks/220620_095847/";
 std::string MCcentral2017 = "root://xrootd-cms.infn.it//store/user/crovelli/BdToX3872Ks_X3872ToJPsiRho_JPsiToMuMu_RhoToPiPi_TuneCP5_13TeV-pythia8-evtgen/crab_central_signal_2017/BdToX3872Ks_X3872ToJPsiRho_JPsiToMuMu_RhoToPiPi_2017.root";
 std::string Data2017_B = "/eos/cms/store/group/phys_bphys/crovelli/nanoaod_X/Xdata2017_2022May17/Charmonium/crab_data_Run2017B/";
 std::string Data2017_C = "root://xrootd-cms.infn.it//store/user/crovelli/Charmonium/crab_data_Run2017C/Run2017C_";
@@ -25,6 +28,7 @@ int LxP_DirNum_MAP(const TString dataset){
 	std::map <TString , int> LxP_DirNum{};
 	
 	LxP_DirNum["MC"] = 1;
+	LxP_DirNum["MCcheck"] = 1;
 	LxP_DirNum["data17B"] = 2;
 	
 	return LxP_DirNum[dataset];
@@ -60,6 +64,10 @@ TChain* LoadTree(TString dataset = "MC"){
 		LxPlusDirPath.push_back(MCdata2017); 
 		LxP_Ndir.push_back(LxP_DirNum_MAP("MC"));
 	}
+	if (dataset ==    "MCcheck"  ){
+		LxPlusDirPath.push_back(MCdata2017_check); 
+		LxP_Ndir.push_back(LxP_DirNum_MAP("MCcheck"));
+	}
 	if (dataset == "data17B" or dataset == "data17"){ 
 		LxPlusDirPath.push_back(Data2017_B); 
 		LxP_Ndir.push_back(LxP_DirNum_MAP("data17B"));
@@ -94,7 +102,7 @@ TChain* LoadTree(TString dataset = "MC"){
 		const char* directory;
 		DIR* dir_pointer = NULL;
 
-		if (dataset == "MC") std::cout << " ===== READING MC data ===== " << std::endl;;
+		if (dataset == "MC" or dataset == "MCcheck") std::cout << " ===== READING MC data ===== " << std::endl;;
 		if (dataset == "data17B" or dataset == "data17") std::cout << " ===== READING RUN2 2017(B) data ===== " << std::endl;
 		
 		for (int d = 0; d < LxP_Ndir[s]; d++ ){
