@@ -48,7 +48,14 @@ MVAoptim:$(INCLUDEDIR)src/OptimizeMVA.cc\
 			$(OUTLIB)OptimizerMVA.o
 			$(CXX) $(CXXFLAGS) -ldl -o OptimizeMVA $(OUTLIB)/OptimizerMVA.o $(GLIBS) $(LDFLAGS) $ $<
 MVAoptim.clean:
-				rm -f MVAnalysis
+				rm -f OptimizeMVA 
+
+# ==================== MVA-cut application =============================================
+CUTapply:$(INCLUDEDIR)src/ApplyMVAcuts.cc\
+			$(OUTLIB)OptimizerMVA.o
+			$(CXX) $(CXXFLAGS) -ldl -o ApplyMVAcuts $(OUTLIB)/OptimizerMVA.o $(GLIBS) $(LDFLAGS) $ $<
+CUTapply.clean:
+				rm -f ApplyMVAcuts
 
 # ==================== MVA application =============================================
 MVAnalysis:$(INCLUDEDIR)src/MVAnalysis.C
@@ -63,10 +70,14 @@ clean:
 		rm -f $(OUTLIB)*.o
 		rm -f X3872App 
 		rm -f MVAnalysis
+		rm -f OptimizeMVA
+		rm -f ApplyMVAcuts
 
 mva: MVAnalysis
 
 opt: MVAoptim
+
+cut: CUTapply
 
 all: X3872App
 
