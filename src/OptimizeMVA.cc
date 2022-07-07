@@ -37,7 +37,7 @@ int main (int argc, char** argv ){
 	if( ( Step_X < 0.05 ) || ( Step_MRho < 0.05 ) ) OutFilePath.Append("Plus"); 
 	OutFilePath.Append(".root");
 
-	double Bs, Ss, Psig;
+	double Bs, Ss, Psig, Psig_err;
 	TFile* OutFile = new TFile(OutFilePath, "RECREATE");
 	TTree* OutTree = new TTree("CutOpt", "");
 	OutTree->Branch("cut_X", &X_cut, "cut_X/D");
@@ -45,6 +45,7 @@ int main (int argc, char** argv ){
 	OutTree->Branch("nB_Sreg", &Bs, "Bs/D");
 	OutTree->Branch("nS_Sreg", &Ss, "Ss/D");
 	OutTree->Branch("SignPunzi", &Psig, "SignPunzi/D");
+	OutTree->Branch("SignPunzi_error", &Psig_err, "SignPunzi_error/D");
 	
 
 	std::cout << "****  START OPTIMIZATION ****\n" << std::endl;
@@ -57,14 +58,14 @@ int main (int argc, char** argv ){
 		for (int im = 0; im < NmR; im++){
 			MRho_cut = min_MRho + im * Step_MRho;
 			if(MRho_cut > Max_MRho) MRho_cut = Max_MRho;
-			//std::cout << X_cut << "\t" << MRho_cut << std::endl;
+			std::cout << X_cut << "\t" << MRho_cut << std::endl;
 			// STEP 2 --> # BKG events extraction
 			Bs = opt->BKG_NevExtraction(X_cut, MRho_cut);
 			//std::cout << "#BKG events in signal region " << Bs << std::endl;
 			// STEP 3 --> # SGN events extraction
 			Ss = opt->SGN_NevExtraction(X_cut, MRho_cut);
 			// STEP 4 --> # PUNZI SIGNIFICANCE extraction\n\n\n" << std::endl;
-			Psig = opt->PunziSign(Ss, Bs);
+			Psig = opt->PunziSign(Ss, Bs, &Psig_err);
 			//std::cout << "SIGNIFICANCE = " << Psig << std::endl;
 			OutTree->Fill();
 		}
