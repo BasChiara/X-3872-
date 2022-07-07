@@ -4,10 +4,13 @@
 HLTapply::HLTapply(TTree *tree, const TString dataset) : PreSelDATA2017(tree){ 
 
 	dataset_ = dataset;
-	//outFileHistoPath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/plots/HLTapply_" + dataset_ + ".root";
-   //outFileTreePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/BKG_" + dataset_ + ".root";
-	outFileHistoPath_ = dataset_ + "_histo.root";
-   outFileTreePath_ =  dataset_ +"_tree.root";
+	outFileHistoPath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/plots/HLTapply_" + dataset_ + ".root";
+   outFileTreePath_ = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/";
+	if ( dataset_ == "MC" ) outFileTreePath_.Append("SGN_");
+	else outFileTreePath_.Append("BKG_");
+	outFileTreePath_.Append( dataset_ + ".root");
+	//outFileHistoPath_ = dataset_ + "_histo.root";
+   //outFileTreePath_ =  dataset_ +"_tree.root";
 	
 	FileFitParB0 = "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/B0params.txt";
 	FileFitParK0s= "/afs/cern.ch/user/c/cbasile/CMSSW-10-6-20-Analysis/src/BParkNANO/B0toX3872K0s/results/SGNfit/K0sparams.txt";
@@ -52,7 +55,7 @@ void HLTapply::Loop() {
 		
 	// ----- FIT PARAMETER FOR SIGNAL RANGE -----//
 	GetFitParams();
-	bool B0_sidebans, X_SgnRegion, K0s_SgnRegion;
+	bool B0_sidebands, X_SgnRegion, K0s_SgnRegion;
 
 	// ----- OUTPUT TREE SETUP ----- //
 	OutTree_setup();
@@ -196,12 +199,13 @@ void HLTapply::Loop() {
 			M_B0 = B0_finalFit_mass[b];
 			h_TOTfit_B0_M.Fill(M_B0);
 			// --> SIDEBANDS
-			B0_sidebans =  ((M_B0 > MB_farLeft) && (M_B0 < MB_nearLeft) )  || ( (M_B0 > MB_nearRight) && (M_B0 < MB_farRight));
+			B0_sidebands =  ((M_B0 > MB_farLeft) && (M_B0 < MB_nearLeft) )  || ( (M_B0 > MB_nearRight) && (M_B0 < MB_farRight));
+			if(dataset_ == "MC") B0_sidebands = true;
 			M_X3872 = B0_finalFit_X_mass[b];
 			X_SgnRegion = (M_X3872 > MX_nearLeft) && (M_X3872 < MX_nearRight);
 			M_K0s = B0_K0s_nmcFitted_mass[b];
 			K0s_SgnRegion = (M_K0s > MK0s_nearLeft) && (M_K0s < MK0s_nearRight);
-			if (B0_sidebans && X_SgnRegion && K0s_SgnRegion){ 
+			if (B0_sidebands && X_SgnRegion && K0s_SgnRegion){ 
 				TOTsidebands_B0++;
 				h_SideBands_B0_M.Fill(M_B0);
 
@@ -211,6 +215,9 @@ void HLTapply::Loop() {
 				P4_Reco_Rho = P4_Reco_Pi1 + P4_Reco_Pi2;
 
 				// TTree variables
+				Run = run;
+				LumiBlock = luminosityBlock;
+				Event = event;
 				M_Rho = B0_finalFit_Rho_mass[b];
 				M_mumu = B0_MuMu_fitted_mass[b];
 				pTM_B0 = P4_Reco_B0.Pt()/M_B0;			
@@ -243,7 +250,7 @@ void HLTapply::Loop() {
    } // on events
 
    std::cout << "Triggered events: \t" << NTriggeredEv << std::endl;
-   std::cout << "Events with at lesat 1 B0 candidate: \t" << NTrigSelEV << std::endl;
+   std::cout << "Events with at least 1 B0 candidate: \t" << NTrigSelEV << std::endl;
    std::cout << "Muon pairs passing Trigger Selection: \t" << TOTcand_JPsi << std::endl;
    std::cout << "Number of B0 candidates: \t" << TOTcand_B0 << std::endl;
    std::cout << "Number of B0 in the sidebands: \t" << TOTsidebands_B0 << std::endl;
@@ -369,8 +376,14 @@ int HLTapply::RecoPartFillP4(const int Bidx){
 
 void HLTapply::OutTree_setup(){
 
-	outTree_ = new TTree("B0sidebands", "B0sidebands");
+	TString TreeName = "B0sidebands";
+	if (dataset_ == "MC") TreeName = "mcSIGNAL";
+	outTree_ = new TTree( TreeName, TreeName);
 	std::cout << " out tree setting up ... " << std::endl;
+
+	outTree_->Branch("run", &Run, "run/F");
+	outTree_->Branch("LumiBlock", &LumiBlock, "LumiBlock/F");
+	outTree_->Branch("event", &Event, "Event/F");
 	
 	outTree_->Branch("M_B0", &M_B0, "M_B0/F");
 	outTree_->Branch("M_Rho", &M_Rho, "M_Rho/F");

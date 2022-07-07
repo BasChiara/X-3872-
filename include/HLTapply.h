@@ -76,7 +76,8 @@ class HLTapply : public PreSelDATA2017{
 		double MB_nearLeft, MB_nearRight, MB_farLeft, MB_farRight;
 		double MX_nearLeft, MX_nearRight;
 		double MK0s_nearLeft, MK0s_nearRight;
-		// B0 sidebands (TTree branches)
+		// (TTree branches)
+		float Event, LumiBlock, Run;
 		float M_B0, M_Rho, M_X3872, M_mumu, M_K0s;	
 		float pTM_B0, LxySign_B0, SVprob, CosAlpha_B0;
 		float pT_Rho, pT_Pi1, DR_Pi1B0, D0_Rho;
