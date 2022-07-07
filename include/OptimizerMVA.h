@@ -42,18 +42,23 @@ public:
 	// getters
 	TFile* GetFile(TString file); 
 	void GetCorrelation_BDT_MR();
+	int  GetSignalPreCut();
+	double GetSGNfactor() {return SGNfactor;};
+	double GetAvMultiplicity(const double Xcut, const double MRcut, TString dataset );
+	void GetControlPlots(const double Xcut, const double MRcut);
 
 	// analysis methods 
 	int ApplyBDT();
 	double BKG_NevExtraction(const double Xcut, const double MRcut);
 	double SGN_NevExtraction(const double Xcut, const double MRcut);
-	double PunziSign(const double S, const double B);
+	double PunziSign(const double S, const double B, double* PSerr);
 	int    makeSGNvsBKGplot(const double Xcut, const double MRcut);
 	int    makeMASSplot2D(const double Xcut, const double MRcut);
 
 
 private:
 
+	int SGNprecut;
 	double SGNfactor;
 // I/O file path
 
@@ -65,6 +70,7 @@ private:
 	std::string inFileFitPar_path;
 
 // TTree
+	float run, LumiBlock, event;
 	float pTM_B0, SVprob, LxySign_B0, CosAlpha_B0, DR_Pi1B0, pT_Pi1, pT_Rho, D0_Rho;
 	float M_Rho, M_B0, M_MuMu, M_X3872, M_K0s;
 	float X;
