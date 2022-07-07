@@ -79,6 +79,4 @@ opt: MVAoptim
 
 cut: CUTapply
 
-all: X3872App
-
-
+hlt: X3872App
