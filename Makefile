@@ -36,6 +36,8 @@ $(OUTLIB)OptimizerMVA.o: $(INCLUDEDIR)src/OptimizerMVA.C
 		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)OptimizerMVA.o $<
 $(OUTLIB)CutterMVA.o: $(INCLUDEDIR)src/CutterMVA.C
 		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)CutterMVA.o $<
+$(OUTLIB)BDTapply.o: $(INCLUDEDIR)src/BDTapply.C
+		$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)BDTapply.o $<
 
 # ==================== X3872 App =============================================
 X3872App:$(INCLUDEDIR)/src/X3872Application.cc\
@@ -60,9 +62,10 @@ CUTapply.clean:
 				rm -f ApplyMVAcuts
 
 # ==================== MVA-cut unblinded =============================================
-CUTunbl:$(INCLUDEDIR)src/ApplyMVAcutsUNBL.cc\
-			$(OUTLIB)CutterMVA.o
-			$(CXX) $(CXXFLAGS) -ldl -o ApplyMVAcutsUNBL $(OUTLIB)/CutterMVA.o $(GLIBS) $(LDFLAGS) $ $<
+CUTunbl: $(INCLUDEDIR)src/ApplyMVAcutsUNBL.cc\
+			$(OUTLIB)CutterMVA.o\
+			$(OUTLIB)BDTapply.o
+			$(CXX) $(CXXFLAGS) -ldl -o ApplyMVAcutsUNBL $(OUTLIB)/CutterMVA.o $(OUTLIB)/BDTapply.o $(GLIBS) $(LDFLAGS) $ $<
 CUTunbl.clean:
 				rm -f ApplyMVAcutsUNBL
 
@@ -81,6 +84,7 @@ clean:
 		rm -f MVAnalysis
 		rm -f OptimizeMVA
 		rm -f ApplyMVAcuts
+		rm -f ApplyMVAcutsUNBL
 
 mva: MVAnalysis
 
